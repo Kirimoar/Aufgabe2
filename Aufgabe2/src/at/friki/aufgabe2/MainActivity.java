@@ -28,7 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.friki.aufgabe1.R;
 
-public class MainActivity extends Activity{
+public class MainActivity extends Activity{//sdf
 	
 	private String[] leftMenuTitles;
 	private DrawerLayout drawerLayout;
