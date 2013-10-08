@@ -10,7 +10,7 @@ public class feedsDBHelper extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 1;
 
 	public feedsDBHelper(Context context) {
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		super(context, DATABASE_NAME, null, DATABASE_VERSION);	//boablalbla
 	}
 
 	// Method is called during creation of the database
