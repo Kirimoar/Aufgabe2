@@ -26,7 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import at.friki.aufgabe1.R;
+import at.friki.aufgabe2.R;
 
 public class MainActivity extends Activity{
 	

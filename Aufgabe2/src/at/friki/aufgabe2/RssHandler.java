@@ -9,7 +9,7 @@ import android.os.Message;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import at.friki.aufgabe1.R;
+import at.friki.aufgabe2.R;
 
 public class RssHandler extends Handler {
 	

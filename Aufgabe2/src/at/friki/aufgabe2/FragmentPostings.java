@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.os.Messenger;
 import android.view.View;
 import android.widget.ListView;
-import at.friki.aufgabe1.R;
+import at.friki.aufgabe2.R;
 
 public class FragmentPostings extends ListFragment{
 

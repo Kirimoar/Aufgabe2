@@ -16,7 +16,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import at.friki.aufgabe1.R;
+import at.friki.aufgabe2.R;
 
 public class FragmentSubscribe extends Fragment implements OnClickListener {
 

@@ -15,7 +15,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import at.friki.aufgabe1.R;
+import at.friki.aufgabe2.R;
 
 public class FragmentMyRss extends ListFragment {
 

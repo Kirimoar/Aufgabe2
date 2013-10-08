@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Aufgabe1</string>
+    <string name="app_name">Aufgabe2</string>
     <string name="action_settings">Settings</string>
     
     <string name="txtSubscribeTitle">Bitte Name und URL eingeben</string>
@@ -20,16 +20,16 @@
     </string-array>
     
     
-    <string name="RssName">at.friki.aufgabe1.RssName</string>
-    <string name="RssAdress">at.friki.aufgabe1.RssAdress</string>
-	<string name="RssHandler">at.friki.aufgabe1.RssHandler</string>
-	<string name="RssTitleValue">at.friki.aufgabe1.RssTitleValue</string>
-	<string name="RssLinkValue">at.friki.aufgabe1.RssLinkValue</string>
-	<string name="RssListPosition">at.friki.aufgabe1.RssListPosition</string>
-	<string name="RssErrMessage">at.friki.aufgabe1.RssErrMessage</string>
+    <string name="RssName">at.friki.aufgabe2.RssName</string>
+    <string name="RssAdress">at.friki.aufgabe2.RssAdress</string>
+	<string name="RssHandler">at.friki.aufgabe2.RssHandler</string>
+	<string name="RssTitleValue">at.friki.aufgabe2.RssTitleValue</string>
+	<string name="RssLinkValue">at.friki.aufgabe2.RssLinkValue</string>
+	<string name="RssListPosition">at.friki.aufgabe2.RssListPosition</string>
+	<string name="RssErrMessage">at.friki.aufgabe2.RssErrMessage</string>
 	
-	<string name="txtSubscribeName">at.friki.aufgabe1.txtSubscribeName</string>
-	<string name="txtSubscribeUrl">at.friki.aufgabe1.txtSubscribeUrl</string>
+	<string name="txtSubscribeName">at.friki.aufgabe2.txtSubscribeName</string>
+	<string name="txtSubscribeUrl">at.friki.aufgabe2.txtSubscribeUrl</string>
 	
 	
 	<string name="titleFragmentSubscribe">Subscribe</string>

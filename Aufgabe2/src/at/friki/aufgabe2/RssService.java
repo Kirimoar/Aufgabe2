@@ -15,7 +15,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.widget.TextView;
 import android.widget.Toast;
-import at.friki.aufgabe1.R;
+import at.friki.aufgabe2.R;
 
 
 public class RssService extends IntentService {
