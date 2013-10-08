@@ -5,14 +5,14 @@ import android.util.Log;
 
 public class tableFeeds {
 
-	public static final String TABLE_FEEDS = "feeds";
+	public static final String TABLE_NAME = "feeds";
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_NAME = "name";
 	public static final String COLUMN_URL = "url";
 	
 	// Database creation SQL statement
 	private static final String DATABASE_CREATE = "create table " 
-      + TABLE_FEEDS
+      + TABLE_NAME
       + "(" 
       + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
       + COLUMN_NAME + " TEXT NOT NULL, " 
@@ -27,7 +27,7 @@ public class tableFeeds {
 		Log.w(tableFeeds.class.getName(), "Upgrading database from version "
 				+ oldVersion + " to " + newVersion
 				+ ", which will destroy all old data");
-		database.execSQL("DROP TABLE IF EXISTS " + TABLE_FEEDS);
+		database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 		onCreate(database);
 	}
 } 

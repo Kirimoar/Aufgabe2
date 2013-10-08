@@ -7,11 +7,14 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -27,6 +30,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import at.friki.aufgabe2.R;
+import at.friki.aufgabe2.DB.MyRssContentProvider;
+import at.friki.aufgabe2.DB.tableFeeds;
 
 public class MainActivity extends Activity{
 	
@@ -142,14 +147,23 @@ public class MainActivity extends Activity{
     		String txtSubscribeName = intent.getStringExtra(getString(R.string.txtSubscribeName));
       		String txtSubscribeUrl = intent.getStringExtra(getString(R.string.txtSubscribeUrl));
       		
-      		MyRssDataStore.getInstance().saveNewRssFeed(context, txtSubscribeName, txtSubscribeUrl, true);
+      		//MyRssDataStore.getInstance().saveNewRssFeed(context, txtSubscribeName, txtSubscribeUrl, true);	// soll ersetzt werden durch contentProvider
+      		
+      		ContentValues values = new ContentValues();
+      	    values.put(tableFeeds.COLUMN_NAME, txtSubscribeName);
+      	    values.put(tableFeeds.COLUMN_URL, txtSubscribeUrl);
+      		
+      		Uri uri = getContentResolver().insert(MyRssContentProvider.CONTENT_URI_FEEDS, values);
+      		
+      		
+      		
       		
       		setTitle(getResources().getStringArray(R.array.left_menu)[1]);
         	
-        	FragmentManager man = getFragmentManager();											// Fragment Eigene Feeds anzeigen, Funktion zum Hinzufügen selbst FEHLT
+        	FragmentManager man = getFragmentManager();
             FragmentTransaction trans = man.beginTransaction();
             
-            trans.replace(R.id.main_activity_container, new FragmentMyRss());					// Eigene Feeds anzeigen, Funktion zum Hinzufügen selbst FEHLT
+            trans.replace(R.id.main_activity_container, new FragmentMyRss());					// Eigene Feeds anzeigen
             trans.addToBackStack(null);
             trans.commit();
             

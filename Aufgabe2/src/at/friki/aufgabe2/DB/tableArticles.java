@@ -5,7 +5,7 @@ import android.util.Log;
 
 public class tableArticles {
 
-	public static final String TABLE_ARTICLES = "articles";
+	public static final String TABLE_NAME = "articles";
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_FEEDID = "feedID";
 	public static final String COLUMN_DESCRIPTION = "description";
@@ -14,7 +14,7 @@ public class tableArticles {
 	
 	// Database creation SQL statement
 	private static final String DATABASE_CREATE = "create table " 
-      + TABLE_ARTICLES
+      + TABLE_NAME
       + "(" 
       + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
       + COLUMN_FEEDID + "feedID INTEGER, "
@@ -32,7 +32,7 @@ public class tableArticles {
 		Log.w(tableFeeds.class.getName(), "Upgrading database from version "
 				+ oldVersion + " to " + newVersion
 				+ ", which will destroy all old data");
-		database.execSQL("DROP TABLE IF EXISTS " + TABLE_ARTICLES);
+		database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 		onCreate(database);
 	}
 } 
