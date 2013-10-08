@@ -6,15 +6,21 @@ import android.util.Log;
 public class tableArticles {
 
 	public static final String TABLE_ARTICLES = "articles";
+	public static final String COLUMN_ID = "_id";
+	public static final String COLUMN_FEEDID = "feedID";
+	public static final String COLUMN_DESCRIPTION = "description";
+	public static final String COLUMN_TITLE = "title";
+	public static final String COLUMN_LINK = "link";
 	
 	// Database creation SQL statement
 	private static final String DATABASE_CREATE = "create table " 
       + TABLE_ARTICLES
       + "(" 
-      + "id INTEGER PRIMARY KEY AUTOINCREMENT, " 
-      + "feedID INTEGER, "
-      + "name TEXT NOT NULL, " 
-      + "url TEXT NOT NULL, " 
+      + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
+      + COLUMN_FEEDID + "feedID INTEGER, "
+      + COLUMN_DESCRIPTION + " TEXT NOT NULL, " 
+      + COLUMN_TITLE + " TEXT NOT NULL, "
+      + COLUMN_LINK + " TEXT NOT NULL, "
       + "FOREIGN KEY(feedID) REFERENCES feeds(id)"
       + ");";
 

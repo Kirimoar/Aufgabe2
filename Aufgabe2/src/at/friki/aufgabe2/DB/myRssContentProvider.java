@@ -13,7 +13,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 import at.friki.aufgabe2.DB.feedsDBHelper;
-import at.friki.aufgabe2.DB.acticlesDBHelper;
 import at.friki.aufgabe2.DB.tableFeeds;
 import at.friki.aufgabe2.DB.tableArticles;
 
@@ -66,7 +65,7 @@ public class myRssContentProvider extends ContentProvider {
 				break;
 			case FEED_ID:
 				// Adding the ID to the original query
-				queryBuilder.appendWhere(TodoTable.COLUMN_ID + "=" + uri.getLastPathSegment());
+				queryBuilder.appendWhere(tableFeeds.COLUMN_ID + "=" + uri.getLastPathSegment());
 				break;
 			default:
 				throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -80,107 +79,98 @@ public class myRssContentProvider extends ContentProvider {
 		return cursor;
 	}
 
-  @Override
-  public String getType(Uri uri) {
-    return null;
+	@Override
+	public String getType(Uri uri) {
+		return null;
+	}
+
+	@Override
+	public Uri insert(Uri uri, ContentValues values) {
+	    int uriType = sURIMatcher.match(uri);
+	    SQLiteDatabase sqlDB = database.getWritableDatabase();
+	    int rowsDeleted = 0;
+	    long id = 0;
+	    switch (uriType) {
+	    	case FEEDS:
+	    		id = sqlDB.insert(tableFeeds.TABLE_FEEDS, null, values);
+	    		break;
+	    	default:
+	    		throw new IllegalArgumentException("Unknown URI: " + uri);
+	    }
+	    getContext().getContentResolver().notifyChange(uri, null);
+	    return Uri.parse(BASE_PATH + "/" + id);
   }
 
-  @Override
-  public Uri insert(Uri uri, ContentValues values) {
-    int uriType = sURIMatcher.match(uri);
-    SQLiteDatabase sqlDB = database.getWritableDatabase();
-    int rowsDeleted = 0;
-    long id = 0;
-    switch (uriType) {
-    case TODOS:
-      id = sqlDB.insert(TodoTable.TABLE_TODO, null, values);
-      break;
-    default:
-      throw new IllegalArgumentException("Unknown URI: " + uri);
-    }
-    getContext().getContentResolver().notifyChange(uri, null);
-    return Uri.parse(BASE_PATH + "/" + id);
-  }
+	@Override
+	public int delete(Uri uri, String selection, String[] selectionArgs) {
+	    int uriType = sURIMatcher.match(uri);
+	    SQLiteDatabase sqlDB = database.getWritableDatabase();
+	    int rowsDeleted = 0;
+	    switch (uriType) {
+	    	case FEEDS:
+	    		rowsDeleted = sqlDB.delete(tableFeeds.TABLE_FEEDS, selection, selectionArgs);
+	    		break;
+	    	case FEED_ID:
+	    		String id = uri.getLastPathSegment();
+	    		if (TextUtils.isEmpty(selection)) {
+	    			rowsDeleted = sqlDB.delete(tableFeeds.TABLE_FEEDS, tableFeeds.COLUMN_ID + "=" + id, null);
+	    		} else {
+	    			rowsDeleted = sqlDB.delete(tableFeeds.TABLE_FEEDS, tableFeeds.COLUMN_ID + "=" + id + " and " + selection, selectionArgs);
+	    		}
+	    		break;
+	    	default:
+	    		throw new IllegalArgumentException("Unknown URI: " + uri);
+	    }
+	    getContext().getContentResolver().notifyChange(uri, null);
+	    return rowsDeleted;
+	}
 
-  @Override
-  public int delete(Uri uri, String selection, String[] selectionArgs) {
-    int uriType = sURIMatcher.match(uri);
-    SQLiteDatabase sqlDB = database.getWritableDatabase();
-    int rowsDeleted = 0;
-    switch (uriType) {
-    case TODOS:
-      rowsDeleted = sqlDB.delete(TodoTable.TABLE_TODO, selection,
-          selectionArgs);
-      break;
-    case TODO_ID:
-      String id = uri.getLastPathSegment();
-      if (TextUtils.isEmpty(selection)) {
-        rowsDeleted = sqlDB.delete(TodoTable.TABLE_TODO,
-            TodoTable.COLUMN_ID + "=" + id, 
-            null);
-      } else {
-        rowsDeleted = sqlDB.delete(TodoTable.TABLE_TODO,
-            TodoTable.COLUMN_ID + "=" + id 
-            + " and " + selection,
-            selectionArgs);
-      }
-      break;
-    default:
-      throw new IllegalArgumentException("Unknown URI: " + uri);
-    }
-    getContext().getContentResolver().notifyChange(uri, null);
-    return rowsDeleted;
-  }
+	@Override
+	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
-  @Override
-  public int update(Uri uri, ContentValues values, String selection,
-      String[] selectionArgs) {
+	    int uriType = sURIMatcher.match(uri);
+	    SQLiteDatabase sqlDB = database.getWritableDatabase();
+	    int rowsUpdated = 0;
+	    switch (uriType) {
+	    	case FEEDS:
+	    		rowsUpdated = sqlDB.update(tableFeeds.TABLE_FEEDS, 
+			          values, 
+			          selection,
+			          selectionArgs);
+	    		break;
+	    	case FEED_ID:
+	    		String id = uri.getLastPathSegment();
+	    		if (TextUtils.isEmpty(selection)) {
+	    			rowsUpdated = sqlDB.update(tableFeeds.TABLE_FEEDS, 
+			            values,
+			            tableFeeds.COLUMN_ID + "=" + id, 
+			            null);
+	    		} else {
+	    			rowsUpdated = sqlDB.update(tableFeeds.TABLE_FEEDS, 
+			            values,
+			            tableFeeds.COLUMN_ID + "=" + id 
+			            + " and " 
+			            + selection,
+			            selectionArgs);
+	    		}
+	    		break;
+	    	default:
+	    		throw new IllegalArgumentException("Unknown URI: " + uri);
+	    }
+	    getContext().getContentResolver().notifyChange(uri, null);
+	    return rowsUpdated;
+	}
 
-    int uriType = sURIMatcher.match(uri);
-    SQLiteDatabase sqlDB = database.getWritableDatabase();
-    int rowsUpdated = 0;
-    switch (uriType) {
-    case TODOS:
-      rowsUpdated = sqlDB.update(TodoTable.TABLE_TODO, 
-          values, 
-          selection,
-          selectionArgs);
-      break;
-    case TODO_ID:
-      String id = uri.getLastPathSegment();
-      if (TextUtils.isEmpty(selection)) {
-        rowsUpdated = sqlDB.update(TodoTable.TABLE_TODO, 
-            values,
-            TodoTable.COLUMN_ID + "=" + id, 
-            null);
-      } else {
-        rowsUpdated = sqlDB.update(TodoTable.TABLE_TODO, 
-            values,
-            TodoTable.COLUMN_ID + "=" + id 
-            + " and " 
-            + selection,
-            selectionArgs);
-      }
-      break;
-    default:
-      throw new IllegalArgumentException("Unknown URI: " + uri);
-    }
-    getContext().getContentResolver().notifyChange(uri, null);
-    return rowsUpdated;
-  }
-
-  private void checkColumns(String[] projection) {
-    String[] available = { TodoTable.COLUMN_CATEGORY,
-        TodoTable.COLUMN_SUMMARY, TodoTable.COLUMN_DESCRIPTION,
-        TodoTable.COLUMN_ID };
-    if (projection != null) {
-      HashSet<String> requestedColumns = new HashSet<String>(Arrays.asList(projection));
-      HashSet<String> availableColumns = new HashSet<String>(Arrays.asList(available));
-      // Check if all columns which are requested are available
-      if (!availableColumns.containsAll(requestedColumns)) {
-        throw new IllegalArgumentException("Unknown columns in projection");
-      }
-    }
-  }
-
+	private void checkColumns(String[] projection) {
+		String[] available = { tableFeeds.COLUMN_NAME,
+				tableFeeds.COLUMN_URL, tableFeeds.COLUMN_ID };
+		if (projection != null) {
+			HashSet<String> requestedColumns = new HashSet<String>(Arrays.asList(projection));
+			HashSet<String> availableColumns = new HashSet<String>(Arrays.asList(available));
+			// Check if all columns which are requested are available
+			if (!availableColumns.containsAll(requestedColumns)) {
+				throw new IllegalArgumentException("Unknown columns in projection");
+			}
+		}
+	}
 } 

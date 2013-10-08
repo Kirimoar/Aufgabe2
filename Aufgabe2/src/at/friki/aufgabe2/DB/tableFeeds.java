@@ -6,14 +6,17 @@ import android.util.Log;
 public class tableFeeds {
 
 	public static final String TABLE_FEEDS = "feeds";
+	public static final String COLUMN_ID = "_id";
+	public static final String COLUMN_NAME = "name";
+	public static final String COLUMN_URL = "url";
 	
 	// Database creation SQL statement
 	private static final String DATABASE_CREATE = "create table " 
       + TABLE_FEEDS
       + "(" 
-      + "id INTEGER PRIMARY KEY AUTOINCREMENT, " 
-      + "name TEXT NOT NULL, " 
-      + "url TEXT NOT NULL" 
+      + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
+      + COLUMN_NAME + " TEXT NOT NULL, " 
+      + COLUMN_URL + " TEXT NOT NULL" 
       + ");";
 
 	public static void onCreate(SQLiteDatabase database) {
