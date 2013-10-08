@@ -30,8 +30,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import at.friki.aufgabe2.R;
-import at.friki.aufgabe2.DB.MyRssContentProvider;
-import at.friki.aufgabe2.DB.tableFeeds;
+import at.friki.aufgabe2.contentprovider.MyRssContentProvider;
+import at.friki.aufgabe2.database.tableFeeds;
 
 public class MainActivity extends Activity{
 	
@@ -118,8 +118,19 @@ public class MainActivity extends Activity{
   
     		int position = intent.getIntExtra(getString(R.string.RssListPosition), 0);
     		
-			String[] elements = MyRssDataStore.getInstance().getMyRssNames(context);
-			String[] urls = MyRssDataStore.getInstance().getMyRssUrls(context);
+			//String[] elements = MyRssDataStore.getInstance().getMyRssNames(context);
+			//String[] urls = MyRssDataStore.getInstance().getMyRssUrls(context);			// ersetzen durch contentProvider
+    		
+    		
+    		String[] elements = {};
+    		String[] urls = {};
+    		
+    		Cursor cursor = getContentResolver().query(MyRssContentProvider.CONTENT_URI_ARTICLES, null, null, null, null);
+    		
+    		if (cursor != null) {
+    			cursor.moveToFirst();
+    		}
+    		
     		  
     		Fragment fragment = new FragmentPostings();
     	        
@@ -154,6 +165,10 @@ public class MainActivity extends Activity{
       	    values.put(tableFeeds.COLUMN_URL, txtSubscribeUrl);
       		
       		Uri uri = getContentResolver().insert(MyRssContentProvider.CONTENT_URI_FEEDS, values);
+      		
+      		
+      		Cursor cursor = getContentResolver().query(MyRssContentProvider.CONTENT_URI_FEEDS, null, null, null, null);
+      		Toast.makeText(context, Integer.toString(cursor.getCount()), Toast.LENGTH_LONG).show(); 
       		
       		
       		

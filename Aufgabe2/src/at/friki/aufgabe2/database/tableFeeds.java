@@ -1,27 +1,22 @@
-package at.friki.aufgabe2.DB;
+package at.friki.aufgabe2.database;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-public class tableArticles {
+public class tableFeeds {
 
-	public static final String TABLE_NAME = "articles";
+	public static final String TABLE_NAME = "feeds";
 	public static final String COLUMN_ID = "_id";
-	public static final String COLUMN_FEEDID = "feedID";
-	public static final String COLUMN_DESCRIPTION = "description";
-	public static final String COLUMN_TITLE = "title";
-	public static final String COLUMN_LINK = "link";
+	public static final String COLUMN_NAME = "name";
+	public static final String COLUMN_URL = "url";
 	
 	// Database creation SQL statement
 	private static final String DATABASE_CREATE = "create table " 
       + TABLE_NAME
       + "(" 
       + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
-      + COLUMN_FEEDID + "feedID INTEGER, "
-      + COLUMN_DESCRIPTION + " TEXT NOT NULL, " 
-      + COLUMN_TITLE + " TEXT NOT NULL, "
-      + COLUMN_LINK + " TEXT NOT NULL, "
-      + "FOREIGN KEY(feedID) REFERENCES feeds(id)"
+      + COLUMN_NAME + " TEXT NOT NULL, " 
+      + COLUMN_URL + " TEXT NOT NULL" 
       + ");";
 
 	public static void onCreate(SQLiteDatabase database) {
@@ -36,4 +31,3 @@ public class tableArticles {
 		onCreate(database);
 	}
 } 
-

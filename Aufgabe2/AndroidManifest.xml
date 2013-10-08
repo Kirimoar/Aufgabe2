@@ -30,8 +30,8 @@
         
         <provider
             android:exported="false"
-			android:authorities="at.friki.aufgabe2.contentprovider"
-		    android:name=".contentprovider.myRssContentProvider" >
+            android:name=".contentprovider.MyRssContentProvider"
+			android:authorities="at.friki.aufgabe2.contentprovider.myrsscontentprovider" >
 		</provider>
     </application>
 

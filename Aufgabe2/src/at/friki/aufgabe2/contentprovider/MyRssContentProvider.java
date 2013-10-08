@@ -1,4 +1,4 @@
-package at.friki.aufgabe2.DB;
+package at.friki.aufgabe2.contentprovider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
+import at.friki.aufgabe2.database.MyDatabaseHelper;
+import at.friki.aufgabe2.database.tableArticles;
+import at.friki.aufgabe2.database.tableFeeds;
 
 public class MyRssContentProvider extends ContentProvider {
 
@@ -53,30 +56,27 @@ public class MyRssContentProvider extends ContentProvider {
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
-		// Using SQLiteQueryBuilder instead of query() method
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-
-
-		// Set the table
-		queryBuilder.setTables(tableFeeds.TABLE_NAME);
-		queryBuilder.setTables(tableFeeds.TABLE_NAME);
 
 		int uriType = sURIMatcher.match(uri);
 		switch (uriType) {
 			case FEEDS:
+				queryBuilder.setTables(tableFeeds.TABLE_NAME);	// Set the table
 				break;
-			case FEED_ID:
-				// Adding the ID to the original query
-				queryBuilder.appendWhere(tableFeeds.COLUMN_ID + "=" + uri.getLastPathSegment());
+			case ARTICLES:
+				queryBuilder.setTables(tableArticles.TABLE_NAME);	// Set the table
+				
+				break;
+			case FEED_ID:	// TODO: glaub das brauchen wir nicht
+				/*// Adding the ID to the original query
+				queryBuilder.appendWhere(tableFeeds.COLUMN_ID + "=" + uri.getLastPathSegment());*/
 				break;
 			default:
 				throw new IllegalArgumentException("Unknown URI: " + uri);
 		}
 
-		SQLiteDatabase db = database.getWritableDatabase();
+		SQLiteDatabase db = database.getReadableDatabase();
 		Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
-		// Make sure that potential listeners are getting notified
-		cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
 		return cursor;
 	}
@@ -108,6 +108,16 @@ public class MyRssContentProvider extends ContentProvider {
 	    return Uri.parse(CONTENT_URI_FEEDS + "/" + id);		// TODO: für was? ^^
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	// TODO: DELETE und UPDATE noch anpassen
+	
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
 	    int uriType = sURIMatcher.match(uri);
