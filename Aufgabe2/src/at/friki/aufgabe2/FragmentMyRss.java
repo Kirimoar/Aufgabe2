@@ -5,8 +5,12 @@ package at.friki.aufgabe2;
  */
 import android.app.AlertDialog;
 import android.app.ListFragment;
+import android.app.LoaderManager;
+import android.app.LoaderManager.LoaderCallbacks;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -17,28 +21,31 @@ import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import at.friki.aufgabe2.R;
 import at.friki.aufgabe2.contentprovider.MyRssContentProvider;
+import at.friki.aufgabe2.database.tableFeeds;
 
-public class FragmentMyRss extends ListFragment {
+public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Cursor> {
 
 	private int delItemKey = 0;
+	private SimpleCursorAdapter adapter;		
 	public static final String BROADCAST_FRAGMENT_MYRSS_CLICK = "BROADCAST_FRAGMENT_MYRSS_CLICK";
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setContentView(R.layout.myrss_layout);
         
         // MyRss-Daten Objekt anlegen
         //String[] elements = MyRssDataStore.getInstance().getMyRssNames(getActivity());	// wird durch contentProvider ersetzt
         //setListAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, elements));
         
-        Cursor cursor = getActivity().getContentResolver().query(MyRssContentProvider.CONTENT_URI_FEEDS, null, null, null, null);
-        
-        CursorAdapter a = new CursorAdapter();
-        
-        
+		String[] from = { tableFeeds.COLUMN_NAME };
+	    int[] to = { android.R.id.text1 };	// Standard Android TextElement
+
+	    getLoaderManager().initLoader(0, null, this);
+	    adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, from, to, 0);	// Anzeigen in Standard Android ListView
+        setListAdapter(adapter);
     }
 	
 	@Override
@@ -86,4 +93,39 @@ public class FragmentMyRss extends ListFragment {
         // Set title
         getActivity().getActionBar().setTitle(R.string.titleFragmentMyRss);
     }
+
+	
+	
+	
+	
+	
+	/**
+     * This creates and return a new Loader (CursorLoader or custom Loader) for the given ID. This method returns the Loader that is created, 
+     * but you don't need to capture a reference to it. 
+     */
+	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+		CursorLoader cursorLoader = new CursorLoader(getActivity(), MyRssContentProvider.CONTENT_URI_FEEDS, null, null, null, null);
+	    return cursorLoader;
+	}
+
+	/**
+	 * Called when a previously created loader has finished its load. This assigns the new Cursor but does not close the previous one. 
+	 * This allows the system to keep track of the Cursor and manage it for us, optimizing where appropriate. This method is guaranteed
+	 * to be called prior to the release of the last data that was supplied for this loader. At this point you should remove all use of 
+	 * the old data (since it will be released soon), but should not do your own release of the data since its loader owns it and will take care of that.
+	 * The framework would take of closing of old cursor once we return.
+	 */
+	public void onLoadFinished(Loader<Cursor> loader,Cursor cursor) {
+		if(adapter!=null && cursor!=null)
+			adapter.swapCursor(cursor); //swap the new cursor in.
+	}
+	
+	/**
+	 * This method is triggered when the loader is being reset and the loader data is no longer available. 
+	 * This is called when the last Cursor provided to onLoadFinished() above is about to be closed.  We need to make sure we are no longer using it.
+	 */
+	public void onLoaderReset(Loader<Cursor> arg0) {
+		if(adapter!=null)
+			adapter.swapCursor(null);
+	}
 }
