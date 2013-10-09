@@ -7,15 +7,18 @@ import android.app.AlertDialog;
 import android.app.ListFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import at.friki.aufgabe2.R;
+import at.friki.aufgabe2.contentprovider.MyRssContentProvider;
 
 public class FragmentMyRss extends ListFragment {
 
@@ -25,11 +28,17 @@ public class FragmentMyRss extends ListFragment {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().setContentView(R.layout.myrss_layout);
         
         // MyRss-Daten Objekt anlegen
-        String[] elements = MyRssDataStore.getInstance().getMyRssNames(getActivity());
- 
-        setListAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, elements));
+        //String[] elements = MyRssDataStore.getInstance().getMyRssNames(getActivity());	// wird durch contentProvider ersetzt
+        //setListAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, elements));
+        
+        Cursor cursor = getActivity().getContentResolver().query(MyRssContentProvider.CONTENT_URI_FEEDS, null, null, null, null);
+        
+        CursorAdapter a = new CursorAdapter();
+        
+        
     }
 	
 	@Override
