@@ -65,7 +65,6 @@ public class MyRssContentProvider extends ContentProvider {
 				break;
 			case ARTICLES:
 				queryBuilder.setTables(tableArticles.TABLE_NAME);	// Set the table
-				
 				break;
 			case FEED_ID:	// TODO: glaub das brauchen wir nicht
 				/*// Adding the ID to the original query

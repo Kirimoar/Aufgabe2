@@ -122,21 +122,25 @@ public class MainActivity extends Activity{
 			//String[] urls = MyRssDataStore.getInstance().getMyRssUrls(context);			// ersetzen durch contentProvider
     		
     		
-    		String[] elements = {};
-    		String[] urls = {};
+    		String name = "", url = "";
     		
-    		Cursor cursor = getContentResolver().query(MyRssContentProvider.CONTENT_URI_ARTICLES, null, null, null, null);
+    		Cursor cursor = getContentResolver().query(MyRssContentProvider.CONTENT_URI_FEEDS, null, null, null, null);
     		
     		if (cursor != null) {
-    			cursor.moveToFirst();
+    			if (cursor.moveToPosition(position)) {	// Zur geklickten Position gehen
+    			
+    				name = cursor.getString(cursor.getColumnIndexOrThrow(tableFeeds.COLUMN_NAME));	// Spalte Name bei aktueller Cursor Position auslesen
+    				url = cursor.getString(cursor.getColumnIndexOrThrow(tableFeeds.COLUMN_URL));	// Spalte Url bei aktueller Cursor Position auslesen
+    			}
+    			
+    			cursor.close();
     		}
     		
-    		  
     		Fragment fragment = new FragmentPostings();
     	        
 	        Bundle args = new Bundle();
-	        args.putString(getResources().getString(R.string.RssName), elements[position]);
-			args.putString(getResources().getString(R.string.RssAdress), urls[position]);	//http://derStandard.at/?page=rss&ressort=Webstandard
+	        args.putString(getResources().getString(R.string.RssName), name);
+			args.putString(getResources().getString(R.string.RssAdress), url);	//http://derStandard.at/?page=rss&ressort=Webstandard
 			fragment.setArguments(args);
 			
 			FragmentManager fragmentManager = getFragmentManager();
