@@ -20,6 +20,7 @@
     </string-array>
     
     
+    <string name="RssId">at.friki.aufgabe2.Id</string>
     <string name="RssName">at.friki.aufgabe2.RssName</string>
     <string name="RssAdress">at.friki.aufgabe2.RssAdress</string>
 	<string name="RssHandler">at.friki.aufgabe2.RssHandler</string>

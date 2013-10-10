@@ -18,9 +18,9 @@ public class tableArticles {
       + "(" 
       + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
       + COLUMN_FEEDID + " INTEGER, "
-      + COLUMN_DESCRIPTION + " TEXT NOT NULL, " 
-      + COLUMN_TITLE + " TEXT NOT NULL, "
-      + COLUMN_LINK + " TEXT NOT NULL, "
+      + COLUMN_DESCRIPTION + " TEXT, " 
+      + COLUMN_TITLE + " TEXT, "
+      + COLUMN_LINK + " TEXT, "
       + "FOREIGN KEY(" + COLUMN_FEEDID + ") REFERENCES feeds(" + COLUMN_ID + ")"
       + ");";
 

@@ -26,7 +26,7 @@ public class FragmentPostings extends ListFragment{
         Intent intent = new Intent(getActivity(), RssService.class);
         intent.putExtra(getResources().getString(R.string.RssName), getArguments().getString(getResources().getString(R.string.RssName)));
         intent.putExtra(getResources().getString(R.string.RssAdress), getArguments().getString(getResources().getString(R.string.RssAdress)));
-        intent.putExtra(getResources().getString(R.string.RssHandler), new Messenger(this.rssHandler));
+        //intent.putExtra(getResources().getString(R.string.RssHandler), new Messenger(this.rssHandler));
         
         getActivity().startService(intent);
     }

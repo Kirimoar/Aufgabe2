@@ -7,7 +7,9 @@ import java.util.logging.Logger;
 
 import android.app.IntentService;
 import android.app.Service;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -16,6 +18,9 @@ import android.os.RemoteException;
 import android.widget.TextView;
 import android.widget.Toast;
 import at.friki.aufgabe2.R;
+import at.friki.aufgabe2.contentprovider.MyRssContentProvider;
+import at.friki.aufgabe2.database.tableArticles;
+import at.friki.aufgabe2.database.tableFeeds;
 
 
 public class RssService extends IntentService {
@@ -25,7 +30,8 @@ public class RssService extends IntentService {
 	
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		Messenger messenger=(Messenger) intent.getExtras().get(getResources().getString(R.string.RssHandler)); 
+		//Messenger messenger=(Messenger) intent.getExtras().get(getResources().getString(R.string.RssHandler)); 
+		int rssId = intent.getIntExtra(getResources().getString(R.string.RssId), 0);
 		String rssName = intent.getStringExtra(getResources().getString(R.string.RssName));
 		String rssAdress = intent.getStringExtra(getResources().getString(R.string.RssAdress));
 		String errMsg = "";
@@ -41,14 +47,19 @@ public class RssService extends IntentService {
 			errMsg = e.getCause() + ": " + e.getMessage();
 		}
 		
-        ArrayList<String> titles = new ArrayList<String>();
-        ArrayList<String> links = new ArrayList<String>();
-
-        for(RssItem item: items) {
-        	titles.add(item.getTitle());
-        	links.add(item.getLink().toString());
-        }        
         
+        
+        for(RssItem item: items) {
+        	ContentValues values = new ContentValues();
+      	    values.put(tableArticles.COLUMN_TITLE, item.getTitle());
+      	    values.put(tableArticles.COLUMN_LINK, item.getLink().toString());
+      	    values.put(tableArticles.COLUMN_DESCRIPTION, item.getDescription());
+      	    values.put(tableArticles.COLUMN_FEEDID, rssId);
+      	    getContentResolver().insert(MyRssContentProvider.CONTENT_URI_ARTICLES, values);
+        }   
+        
+        
+        /*
         // Ergebniss per Handle and Activity/Fragment senden
         Message msg = Message.obtain();
         Bundle data = new Bundle();
@@ -62,6 +73,6 @@ public class RssService extends IntentService {
             messenger.send(msg);
         } catch (RemoteException e) {
             e.printStackTrace();
-        } 
+        } */
 	}
 }

@@ -96,7 +96,7 @@ public class MyRssContentProvider extends ContentProvider {
 	    		id = db.insert(tableFeeds.TABLE_NAME, null, values);
 	    		break;
 	    	case ARTICLES:
-	    		// TODO: noch zu machen
+	    		id = db.insert(tableArticles.TABLE_NAME, null, values);
 	    		break;
 	    	default:
 	    		throw new IllegalArgumentException("Unknown URI: " + uri);

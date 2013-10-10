@@ -22,6 +22,7 @@ import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 import at.friki.aufgabe2.R;
 import at.friki.aufgabe2.contentprovider.MyRssContentProvider;
 import at.friki.aufgabe2.database.tableFeeds;
@@ -35,6 +36,11 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Nur zu Testzwecken
+  		Cursor cursor = getActivity().getContentResolver().query(MyRssContentProvider.CONTENT_URI_ARTICLES, null, null, null, null);
+  		Toast.makeText(getActivity(), Integer.toString(cursor.getCount()), Toast.LENGTH_LONG).show(); 
+        
         
         // MyRss-Daten Objekt anlegen
         //String[] elements = MyRssDataStore.getInstance().getMyRssNames(getActivity());	// wird durch contentProvider ersetzt

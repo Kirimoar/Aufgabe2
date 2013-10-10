@@ -1,6 +1,5 @@
 package at.friki.aufgabe2;
 
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -29,8 +28,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import at.friki.aufgabe2.FragmentMyRss;
+import at.friki.aufgabe2.FragmentSubscribe;
 import at.friki.aufgabe2.R;
 import at.friki.aufgabe2.contentprovider.MyRssContentProvider;
+import at.friki.aufgabe2.contentprovider.MyRssContentObserver;
 import at.friki.aufgabe2.database.tableFeeds;
 
 public class MainActivity extends Activity{
@@ -42,6 +44,8 @@ public class MainActivity extends Activity{
 
     private CharSequence drawerTitle;
     private CharSequence title;
+    
+    private MyRssContentObserver observer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,21 +100,28 @@ public class MainActivity extends Activity{
             selectItem(0);
         }
         
+        observer = new MyRssContentObserver(new Handler(), this);
+    }
 
-        
-        /** Diverse Broadcast Listener */   
+    @Override
+    protected void onResume() {
+    	super.onResume();
+    	
+    	/** Diverse Broadcast Listener */   
         LocalBroadcastManager.getInstance(this).registerReceiver(SubscribeReceiver,	
       	      new IntentFilter(FragmentSubscribe.BROADCAST_FRAGMENT_SUBSCRIBE_CLICK));
         
-        LocalBroadcastManager.getInstance(this).registerReceiver(PostReceiver,
-        	      new IntentFilter(FragmentMyRss.BROADCAST_FRAGMENT_MYRSS_CLICK)); 
+        LocalBroadcastManager.getInstance(this).registerReceiver(MyRssReceiver,
+        	      new IntentFilter(FragmentMyRss.BROADCAST_FRAGMENT_MYRSS_CLICK));
+        
+        /** ContentObserver - wird bei Änderung einer URI gedriggert*/
+        getContentResolver().registerContentObserver(MyRssContentProvider.CONTENT_URI_ARTICLES, true, observer);
     }
     
     
+    /**	Fragment MyRss Broadcast abfangen und Postings-Fragment aufrufen */
     
-    /**	Fragment Postings Broadcast abfangen und Fragment aufrufen */
-    
-    private BroadcastReceiver PostReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver MyRssReceiver = new BroadcastReceiver() {
     	@Override
     	public void onReceive(Context context, Intent intent) {    		  
     		  
@@ -123,6 +134,7 @@ public class MainActivity extends Activity{
     		
     		
     		String name = "", url = "";
+    		int id = 0;
     		
     		Cursor cursor = getContentResolver().query(MyRssContentProvider.CONTENT_URI_FEEDS, null, null, null, null);
     		
@@ -131,6 +143,7 @@ public class MainActivity extends Activity{
     			
     				name = cursor.getString(cursor.getColumnIndexOrThrow(tableFeeds.COLUMN_NAME));	// Spalte Name bei aktueller Cursor Position auslesen
     				url = cursor.getString(cursor.getColumnIndexOrThrow(tableFeeds.COLUMN_URL));	// Spalte Url bei aktueller Cursor Position auslesen
+    				id = cursor.getInt(cursor.getColumnIndexOrThrow(tableFeeds.COLUMN_ID));
     			}
     			
     			cursor.close();
@@ -139,6 +152,7 @@ public class MainActivity extends Activity{
     		Fragment fragment = new FragmentPostings();
     	        
 	        Bundle args = new Bundle();
+	        args.putInt(getResources().getString(R.string.RssId), id);
 	        args.putString(getResources().getString(R.string.RssName), name);
 			args.putString(getResources().getString(R.string.RssAdress), url);	//http://derStandard.at/?page=rss&ressort=Webstandard
 			fragment.setArguments(args);
@@ -171,8 +185,9 @@ public class MainActivity extends Activity{
       		Uri uri = getContentResolver().insert(MyRssContentProvider.CONTENT_URI_FEEDS, values);
       		
       		
-      		Cursor cursor = getContentResolver().query(MyRssContentProvider.CONTENT_URI_FEEDS, null, null, null, null);
-      		Toast.makeText(context, Integer.toString(cursor.getCount()), Toast.LENGTH_LONG).show(); 
+      		// Nur zu Testzwecken
+      		//Cursor cursor = getContentResolver().query(MyRssContentProvider.CONTENT_URI_FEEDS, null, null, null, null);
+      		//Toast.makeText(context, Integer.toString(cursor.getCount()), Toast.LENGTH_LONG).show(); 
       		
       		
       		
@@ -286,12 +301,12 @@ public class MainActivity extends Activity{
     }
     
     @Override
-    protected void onDestroy() {
-      // Unregister since the activity is about to be closed.
-      LocalBroadcastManager.getInstance(this).unregisterReceiver(SubscribeReceiver);
-      LocalBroadcastManager.getInstance(this).unregisterReceiver(PostReceiver);
-      
-      super.onDestroy();
+    protected void onPause() {
+    	super.onPause(); 
+    	// Unregister since the activity is about to be closed.
+    	LocalBroadcastManager.getInstance(this).unregisterReceiver(SubscribeReceiver);
+    	LocalBroadcastManager.getInstance(this).unregisterReceiver(MyRssReceiver);
+    	getContentResolver().unregisterContentObserver(observer);
     }
 
 }
