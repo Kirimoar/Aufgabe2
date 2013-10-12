@@ -305,6 +305,36 @@ public class MainActivity extends Activity{
     	
     }
     
+    public void ActionSubscribe(MenuItem item){
+    	
+    	Fragment fragment = new FragmentSubscribe();
+    	FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                       .replace(R.id.main_activity_container, fragment)
+                       .commit();
+        
+        drawerList.setItemChecked(0, true);
+        setTitle(leftMenuTitles[0]);
+
+ 	
+    }
+    
+    public void ActionMyFeeds(MenuItem item){
+
+    	Fragment fragment = new FragmentMyRss();
+    	FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                       .replace(R.id.main_activity_container, fragment)
+                       .commit();
+        
+        drawerList.setItemChecked(1, true);
+        setTitle(leftMenuTitles[1]);
+ 	
+    }
+    
+    
+    
+  
     /**
      * When using the ActionBarDrawerToggle, you must call it during
      * onPostCreate() and onConfigurationChanged()...
@@ -332,6 +362,8 @@ public class MainActivity extends Activity{
     	LocalBroadcastManager.getInstance(this).unregisterReceiver(MyRssReceiver);
     	getContentResolver().unregisterContentObserver(observer);
     }
+    
+    
 
 }
 
