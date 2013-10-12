@@ -40,7 +40,6 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 	protected Object mActionMode;
 	
 	
-
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,6 +64,9 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
         
    
     }
+	
+	
+	/************** ALTER PART CAB CALLBACK **************
 	
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
@@ -104,6 +106,10 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 	  };
 	
 	
+	  *****************************************************************/
+	  
+	  
+	
 	
 
 	@Override
@@ -117,14 +123,65 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 	public void onActivityCreated(Bundle savedState) {
 	    super.onActivityCreated(savedState);
 	    
-	    getListView().setOnItemLongClickListener(new OnItemLongClickListener() {	// Langes drücken auf Item
-	        @Override
-	        public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+	   /**************************** Multi-Select und CAB ********************************/
+	    
+	    
+	    ListView listView = getListView();
+    	listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+    	listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+
+    	    @Override
+    	    public void onItemCheckedStateChanged(ActionMode mode, int position,
+    	                                          long id, boolean checked) {
+    	        // Here you can do something when items are selected/de-selected,
+    	        // such as update the title in the CAB
+    	    }
+
+    	    @Override
+    	    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+				
+    	        // Respond to clicks on the actions in the CAB
+    	    	return true;
+    	    }
+
+    	    @Override
+    	    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+    	        // Inflate the menu for the CAB
+    	        MenuInflater inflater = mode.getMenuInflater();
+    	        inflater.inflate(R.menu.contextual, menu);
+    	        return true;
+    	    }
+
+    	    @Override
+    	    public void onDestroyActionMode(ActionMode mode) {
+    	        // Here you can make any necessary updates to the activity when
+    	        // the CAB is removed. By default, selected items are deselected/unchecked.
+    	    }
+
+    	    @Override
+    	    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+    	        // Here you can perform updates to the CAB due to
+    	        // an invalidate() request
+    	        return false;
+    	    }
+    	    
+    	    
+    	});
+	    
+	    
+    	/**************************** Ende Multi-Select und CAB ********************************/
+	    
+   
+	 //   getListView().setOnItemLongClickListener(new OnItemLongClickListener() {	// Langes drücken auf Item
+	   //     @Override
+	     //   public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 	        	//delItemKey = arg2;
 	        	//AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 	        	//builder.setMessage("RSS Feed löschen?").setPositiveButton("Ja", dialogClickListener).setNegativeButton("Nein", dialogClickListener).show();		//Dialog zeigen
 	            //return true;
 	        	
+	        	
+	        	/************** ALTER PART CAB LONGCLICK **************
 	        	
 	        	if (mActionMode != null) {
 	                return false;
@@ -136,10 +193,13 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 	              arg1.setSelected(true);
 	              return true;
 
+	        	*********************************************/
 	        	
-	        }
-	    });
-	}
+	 //       }
+	 //   });
+	
+	
+	} //Ende onActivityCreated
 	
 	 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
         @Override
