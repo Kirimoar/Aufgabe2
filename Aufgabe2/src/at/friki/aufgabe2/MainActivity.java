@@ -20,7 +20,9 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -340,8 +342,47 @@ public class MainActivity extends Activity{
     }
     
     
+   /* 
+    * private ActionMode.Callback mActionModeCallback = new ActionMode.Callback(){
+
+        @Override 
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+              MenuInflater inflater = mode.getMenuInflater();
+              inflater.inflate(R.menu.contextual, menu);
+              return true;
+            }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.menu_item1:
+                    return true;
+                case R.id.menu_item2:
+                    //close the action mode
+                    //mode.finish();
+                    return true;
+                default:
+                    mode.finish();
+                    return false;
+           }
+        }
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+    };
+    */
 
 }
+
+
 
 
 

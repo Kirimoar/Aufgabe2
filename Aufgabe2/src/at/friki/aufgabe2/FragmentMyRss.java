@@ -14,7 +14,12 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
@@ -32,6 +37,10 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 	private int delItemKey = 0;
 	private SimpleCursorAdapter adapter;		
 	public static final String BROADCAST_FRAGMENT_MYRSS_CLICK = "BROADCAST_FRAGMENT_MYRSS_CLICK";
+	protected Object mActionMode;
+	
+	
+
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,8 +61,51 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 	    getLoaderManager().initLoader(0, null, this);
 	    adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, from, to, 0);	// Anzeigen in Standard Android ListView
         setListAdapter(adapter);
+        
+        
+   
     }
 	
+	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+	    // Called when the action mode is created; startActionMode() was called
+	    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+	      // inflate a menu resource providing context menu items
+	      MenuInflater inflater = mode.getMenuInflater();
+	      // assumes that you have "contexual.xml" menu resources
+	      inflater.inflate(R.menu.contextual, menu);
+	      return true;
+	    }
+
+	    // called each time the action mode is shown. Always called after
+	    // onCreateActionMode, but
+	    // may be called multiple times if the mode is invalidated.
+	    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+	      return false; // Return false if nothing is done
+	    }
+
+	    // called when the user selects a contextual menu item
+	    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+	      switch (item.getItemId()) {
+	      case R.id.menu_item1:
+	      
+	    	   mode.finish(); 	//Wenn Klick auf Item1, dann beende ActionMode
+	        
+	    	 return true;
+	      default:
+	        return false;
+	      }
+	    }
+
+	    // called when the user exits the action mode
+	    public void onDestroyActionMode(ActionMode mode) {
+	      mActionMode = null;
+	    }
+	  };
+	
+	
+	
+
 	@Override
     public void onListItemClick(ListView l, View v, int position, long id) {
 		Intent postintent = new Intent(BROADCAST_FRAGMENT_MYRSS_CLICK);
@@ -68,10 +120,23 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 	    getListView().setOnItemLongClickListener(new OnItemLongClickListener() {	// Langes drücken auf Item
 	        @Override
 	        public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-	        	delItemKey = arg2;
-	        	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	        	builder.setMessage("RSS Feed löschen?").setPositiveButton("Ja", dialogClickListener).setNegativeButton("Nein", dialogClickListener).show();		//Dialog zeigen
-	            return true;
+	        	//delItemKey = arg2;
+	        	//AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	        	//builder.setMessage("RSS Feed löschen?").setPositiveButton("Ja", dialogClickListener).setNegativeButton("Nein", dialogClickListener).show();		//Dialog zeigen
+	            //return true;
+	        	
+	        	
+	        	if (mActionMode != null) {
+	                return false;
+	              }
+
+	              // start the CAB using the ActionMode.Callback defined above
+	              mActionMode = getActivity()
+	                  .startActionMode(mActionModeCallback);
+	              arg1.setSelected(true);
+	              return true;
+
+	        	
 	        }
 	    });
 	}
@@ -134,4 +199,8 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 		if(adapter!=null)
 			adapter.swapCursor(null);
 	}
+	
+	 
+		
+	
 }
