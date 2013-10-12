@@ -114,10 +114,27 @@ public class MainActivity extends Activity{
         LocalBroadcastManager.getInstance(this).registerReceiver(MyRssReceiver,
         	      new IntentFilter(FragmentMyRss.BROADCAST_FRAGMENT_MYRSS_CLICK));
         
+        LocalBroadcastManager.getInstance(this).registerReceiver(MyObserverChangedReceiver,
+      	      new IntentFilter(MyRssContentObserver.BROADCAST_CONTENT_OBSERVER_CHANGED));
+        
         /** ContentObserver - wird bei Änderung einer URI gedriggert*/
         getContentResolver().registerContentObserver(MyRssContentProvider.CONTENT_URI_ARTICLES, true, observer);
     }
     
+    
+    private BroadcastReceiver MyObserverChangedReceiver = new BroadcastReceiver() {
+    	@Override
+    	public void onReceive(Context context, Intent intent) { 	// TODO: derzeit noch als Testvariante.... 
+    		Fragment fragment = new FragmentPostings();
+    		
+    		FragmentManager fragmentManager = getFragmentManager();
+			fragmentManager.beginTransaction()
+			               .replace(R.id.main_activity_container, fragment)
+			               //.addToBackStack(null)
+			               .commit();
+    	}
+  	};
+  	
     
     /**	Fragment MyRss Broadcast abfangen und Postings-Fragment aufrufen */
     
@@ -149,6 +166,7 @@ public class MainActivity extends Activity{
     			cursor.close();
     		}
     		
+    		/*
     		Fragment fragment = new FragmentPostings();
     	        
 	        Bundle args = new Bundle();
@@ -162,6 +180,12 @@ public class MainActivity extends Activity{
 			               .replace(R.id.main_activity_container, fragment)
 			               .addToBackStack(null)
 			               .commit();
+			               */
+    		
+    		Intent startIntent = new Intent(context, RssService.class);
+    		startIntent.putExtra(getResources().getString(R.string.RssName), name);
+    		startIntent.putExtra(getResources().getString(R.string.RssAdress), url);
+    		context.startService(startIntent);
     	}
   	};
     	 

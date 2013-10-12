@@ -47,17 +47,25 @@ public class RssService extends IntentService {
 			errMsg = e.getCause() + ": " + e.getMessage();
 		}
 		
-        
+		
+		ArrayList<ContentValues> values = new ArrayList<ContentValues>();
+		
+		
         
         for(RssItem item: items) {
-        	ContentValues values = new ContentValues();
-      	    values.put(tableArticles.COLUMN_TITLE, item.getTitle());
-      	    values.put(tableArticles.COLUMN_LINK, item.getLink().toString());
-      	    values.put(tableArticles.COLUMN_DESCRIPTION, item.getDescription());
-      	    values.put(tableArticles.COLUMN_FEEDID, rssId);
-      	    getContentResolver().insert(MyRssContentProvider.CONTENT_URI_ARTICLES, values);
+        	
+        	ContentValues value = new ContentValues();
+        	value.put(tableArticles.COLUMN_TITLE, item.getTitle());
+        	value.put(tableArticles.COLUMN_LINK, item.getLink().toString());
+        	value.put(tableArticles.COLUMN_DESCRIPTION, item.getDescription());
+        	value.put(tableArticles.COLUMN_FEEDID, rssId);
+        	
+        	values.add(value);
+        	
+      	    //getContentResolver().insert(MyRssContentProvider.CONTENT_URI_ARTICLES, values);
         }   
         
+        getContentResolver().bulkInsert(MyRssContentProvider.CONTENT_URI_ARTICLES, (ContentValues[]) values.toArray(new ContentValues[values.size()]));
         
         /*
         // Ergebniss per Handle and Activity/Fragment senden

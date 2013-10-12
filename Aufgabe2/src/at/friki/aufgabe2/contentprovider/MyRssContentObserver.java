@@ -2,16 +2,20 @@ package at.friki.aufgabe2.contentprovider;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 import android.widget.SimpleCursorAdapter;
+import at.friki.aufgabe2.R;
 import at.friki.aufgabe2.database.tableArticles;
 import at.friki.aufgabe2.database.tableFeeds;
 
 public class MyRssContentObserver extends ContentObserver {
 
 	private Context context;
+	public static final String BROADCAST_CONTENT_OBSERVER_CHANGED = "BROADCAST_CONTENT_OBSERVER_CHANGED";
 	
 	public MyRssContentObserver(Handler handler, Context context) {
         super(handler);
@@ -25,10 +29,19 @@ public class MyRssContentObserver extends ContentObserver {
 
 	@Override
 	public void onChange(boolean selfChange, Uri uri) {
-		String[] from = { tableArticles.COLUMN_TITLE };
-	    int[] to = { android.R.id.text1 };	// Standard Android TextElement
+		//String[] from = { tableArticles.COLUMN_TITLE };
+	    //int[] to = { android.R.id.text1 };	// Standard Android TextElement
 
-	    SimpleCursorAdapter adapter = new SimpleCursorAdapter(context, android.R.layout.simple_list_item_1, null, from, to, 0);	// Anzeigen in Standard Android ListView
+	    //SimpleCursorAdapter adapter = new SimpleCursorAdapter(context, android.R.layout.simple_list_item_1, null, from, to, 0);	// Anzeigen in Standard Android ListView
 	    //((Object) context).setListAdapter(adapter);
+	    
+		
+		
+		
+		// TODO: wird bei jedem Insert aufgerufen... wie können wir das umgehen???
+		
+	    Intent observerIntent = new Intent(BROADCAST_CONTENT_OBSERVER_CHANGED);
+	    //observerIntent.putExtra(getResources().getString(R.string.RssListPosition), position);
+		LocalBroadcastManager.getInstance(context).sendBroadcast(observerIntent);
 	}
 }
