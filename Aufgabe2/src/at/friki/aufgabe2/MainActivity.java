@@ -364,45 +364,7 @@ public class MainActivity extends Activity{
     	LocalBroadcastManager.getInstance(this).unregisterReceiver(MyRssReceiver);
     	getContentResolver().unregisterContentObserver(observer);
     }
-    
-    
-   /* 
-    * private ActionMode.Callback mActionModeCallback = new ActionMode.Callback(){
 
-        @Override 
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-              MenuInflater inflater = mode.getMenuInflater();
-              inflater.inflate(R.menu.contextual, menu);
-              return true;
-            }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.menu_item1:
-                    return true;
-                case R.id.menu_item2:
-                    //close the action mode
-                    //mode.finish();
-                    return true;
-                default:
-                    mode.finish();
-                    return false;
-           }
-        }
-
-		@Override
-		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-    };
-    */
 
 }
 

@@ -37,7 +37,7 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 	private int delItemKey = 0;
 	private SimpleCursorAdapter adapter;		
 	public static final String BROADCAST_FRAGMENT_MYRSS_CLICK = "BROADCAST_FRAGMENT_MYRSS_CLICK";
-	protected Object mActionMode;
+	//protected Object mActionMode;
 	
 	
 	
@@ -126,7 +126,7 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 	   /**************************** Multi-Select und CAB ********************************/
 	    
 	    
-	    ListView listView = getListView();
+	    final ListView listView = getListView();
     	listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
     	listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
 
@@ -135,6 +135,16 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
     	                                          long id, boolean checked) {
     	        // Here you can do something when items are selected/de-selected,
     	        // such as update the title in the CAB
+    	    	
+    	    	if (checked == true){
+    	    		
+    	    		
+    	    		// TODO: hier das Item highlighten, hab aber kA wie das geht...
+    	    		//listView.setItemChecked(position, true); funktioniert nicht, kommt ein Error, kA wieso...
+    	    	}
+    	    		
+    	    		
+
     	    }
 
     	    @Override
@@ -172,14 +182,14 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
     	/**************************** Ende Multi-Select und CAB ********************************/
 	    
    
-	 //   getListView().setOnItemLongClickListener(new OnItemLongClickListener() {	// Langes drücken auf Item
-	   //     @Override
-	     //   public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+	  //  getListView().setOnItemLongClickListener(new OnItemLongClickListener() {	// Langes drücken auf Item
+	  //      @Override
+	  //      public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 	        	//delItemKey = arg2;
 	        	//AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 	        	//builder.setMessage("RSS Feed löschen?").setPositiveButton("Ja", dialogClickListener).setNegativeButton("Nein", dialogClickListener).show();		//Dialog zeigen
 	            //return true;
-	        	
+	
 	        	
 	        	/************** ALTER PART CAB LONGCLICK **************
 	        	
@@ -194,9 +204,9 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 	              return true;
 
 	        	*********************************************/
-	        	
-	 //       }
-	 //   });
+
+	   //   }
+	   // });
 	
 	
 	} //Ende onActivityCreated
@@ -226,10 +236,7 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
     }
 
 	
-	
-	
-	
-	
+
 	/**
      * This creates and return a new Loader (CursorLoader or custom Loader) for the given ID. This method returns the Loader that is created, 
      * but you don't need to capture a reference to it. 
@@ -260,7 +267,5 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 			adapter.swapCursor(null);
 	}
 	
-	 
-		
 	
 }
