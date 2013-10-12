@@ -19,6 +19,11 @@
         <item>My Feeds</item>
     </string-array>
     
+    <string name="action_subscribe">Subscribe</string>
+    <string name="action_myfeeds">MyFeeds</string>  
+    
+    <string name="action_delete">Löschen</string>
+    
     
     <string name="RssId">at.friki.aufgabe2.Id</string>
     <string name="RssName">at.friki.aufgabe2.RssName</string>

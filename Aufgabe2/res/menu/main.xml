@@ -9,14 +9,14 @@
     <item android:id="@+id/NavSubscribe"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
-        android:title="Subscribe" 
+        android:title="@string/action_subscribe" 
         android:onClick="ActionSubscribe"
         />
     
     <item android:id="@+id/NavMyFeeds"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
-        android:title="MyFeeds" 
+        android:title="@string/action_myfeeds" 
         android:onClick="ActionMyFeeds"
         />
        

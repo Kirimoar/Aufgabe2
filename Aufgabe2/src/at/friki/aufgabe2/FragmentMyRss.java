@@ -58,7 +58,7 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 	    int[] to = { android.R.id.text1 };	// Standard Android TextElement
 
 	    getLoaderManager().initLoader(0, null, this);
-	    adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, from, to, 0);	// Anzeigen in Standard Android ListView
+	    adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_multiple_choice, null, from, to, 0);	// Anzeigen in Standard Android ListView
         setListAdapter(adapter);
         
         
@@ -128,6 +128,7 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 	    
 	    final ListView listView = getListView();
     	listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+    	
     	listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
 
     	    @Override
@@ -136,14 +137,6 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
     	        // Here you can do something when items are selected/de-selected,
     	        // such as update the title in the CAB
     	    	
-    	    	if (checked == true){
-    	    		
-    	    		
-    	    		// TODO: hier das Item highlighten, hab aber kA wie das geht...
-    	    		//listView.setItemChecked(position, true); funktioniert nicht, kommt ein Error, kA wieso...
-    	    	}
-    	    		
-    	    		
 
     	    }
 
@@ -151,14 +144,24 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
     	    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 				
     	        // Respond to clicks on the actions in the CAB
-    	    	return true;
+    	    	switch (item.getItemId()) {
+                case R.id.bar_delete:
+                    
+                		// TODO: Löschfunktion aufrufen
+                	
+                    mode.finish(); // Action picked, so close the CAB
+                    return true;
+                default:
+                    return false;
+            }
+
     	    }
 
     	    @Override
     	    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
     	        // Inflate the menu for the CAB
     	        MenuInflater inflater = mode.getMenuInflater();
-    	        inflater.inflate(R.menu.contextual, menu);
+    	        inflater.inflate(R.menu.contextual_myrss, menu);
     	        return true;
     	    }
 
