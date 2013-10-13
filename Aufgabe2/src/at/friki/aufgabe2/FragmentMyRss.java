@@ -54,6 +54,7 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 
         
         // Nur zu Testzwecken
+        /*
   		Cursor cursor = getActivity().getContentResolver().query(MyRssContentProvider.CONTENT_URI_ARTICLES, null, null, null, null);
   		String tmpToast = "";
   		
@@ -67,7 +68,7 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
   		
   		Cursor cursor2 = getActivity().getContentResolver().query(MyRssContentProvider.CONTENT_URI_ARTICLES, null, null, null, null);
   		Toast.makeText(getActivity(), Integer.toString(cursor2.getCount()), Toast.LENGTH_LONG).show(); 
-        
+        */
   		
   		
   		

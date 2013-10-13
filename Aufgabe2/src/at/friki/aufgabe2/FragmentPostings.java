@@ -42,36 +42,13 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
         //intent.putExtra(getResources().getString(R.string.RssHandler), new Messenger(this.rssHandler));
         
         getActivity().startService(intent);*/
-        
-        int selectedFeedId = getArguments().getInt(getResources().getString(R.string.RssId));
-        
 
-        Cursor cursor = getActivity().getContentResolver().query(MyRssContentProvider.CONTENT_URI_ARTICLES, null, tableArticles.COLUMN_FEEDID + "=" + selectedFeedId, null, null);
-		
-		if (cursor != null) {
-			cursor.moveToFirst();
-			
-			String[] from = { tableArticles.COLUMN_TITLE };
-		    int[] to = { android.R.id.text1 };	// Standard Android TextElement
-	
-		    getLoaderManager().initLoader(0, null, this);
-		    adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_multiple_choice, cursor, from, to, 0);	// Anzeigen in Standard Android ListView
-	        setListAdapter(adapter);
-			
-			
-			// Nur zu Testzwecken!!
-			String tmpToast = "";
-			cursor.moveToFirst();
-	  		
-	  		while(cursor.moveToNext()) {
-	  			tmpToast += cursor.getString(cursor.getColumnIndexOrThrow(tableArticles.COLUMN_ID));
-	  			tmpToast += ": " + cursor.getInt(cursor.getColumnIndexOrThrow(tableArticles.COLUMN_FEEDID));
-	  			tmpToast += "; ";
-	  		}
-	  		
-	  		Toast.makeText(getActivity(), tmpToast, Toast.LENGTH_LONG).show(); 
-		}
+		String[] from = { tableArticles.COLUMN_TITLE };
+	    int[] to = { android.R.id.text1 };	// Standard Android TextElement
 
+	    getLoaderManager().initLoader(0, null, this);
+	    adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_multiple_choice, null, from, to, 0);	// Anzeigen in Standard Android ListView
+	    setListAdapter(adapter);
     }
 	
 	
@@ -172,7 +149,8 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
      * but you don't need to capture a reference to it. 
      */
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
-		CursorLoader cursorLoader = new CursorLoader(getActivity(), MyRssContentProvider.CONTENT_URI_ARTICLES, null, null, null, null);
+		CursorLoader cursorLoader = new CursorLoader(getActivity(), MyRssContentProvider.CONTENT_URI_ARTICLES, null, 
+				tableArticles.COLUMN_FEEDID + "=" + getArguments().getInt(getResources().getString(R.string.RssId)), null, null);
 	    return cursorLoader;
 	}
 
