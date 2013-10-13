@@ -51,7 +51,7 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
         super.onCreate(savedInstanceState);
         
         
-        
+
         
         // Nur zu Testzwecken
   		Cursor cursor = getActivity().getContentResolver().query(MyRssContentProvider.CONTENT_URI_ARTICLES, null, null, null, null);
@@ -162,6 +162,10 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
     	        // such as update the title in the CAB
     	    	
     	    	//String clickedRssFeed = (String) listView.getItemAtPosition(position);
+    	    	
+    	    	Cursor cursor = (Cursor) listView.getItemAtPosition(position);
+    	    	
+    	    	
     	    	
     	    	if (checked) {
     	    		if (!delKeys.contains(position))
