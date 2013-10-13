@@ -70,7 +70,7 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
     	                                          long id, boolean checked) {
     	        // Here you can do something when items are selected/de-selected,
     	        // such as update the title in the CAB
-    	    	
+    	    	mode.setTitle("Mark as:");
 
     	    }
 
