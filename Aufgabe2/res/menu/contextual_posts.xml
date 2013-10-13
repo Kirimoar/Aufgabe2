@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+     
+    <item android:id="@+id/bar_read"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_read" 
+        />
+
+    <item android:id="@+id/bar_unread"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_unread" 
+        />
+    
+    <item android:id="@+id/bar_star"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_star" 
+        />
+ 
+</menu>

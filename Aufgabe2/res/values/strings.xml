@@ -23,6 +23,9 @@
     <string name="action_myfeeds">MyFeeds</string>  
     
     <string name="action_delete">Löschen</string>
+    <string name="action_read">Read</string>
+    <string name="action_unread">Unread</string>
+    <string name="action_star">Starred</string>
     
     
     <string name="RssId">at.friki.aufgabe2.Id</string>

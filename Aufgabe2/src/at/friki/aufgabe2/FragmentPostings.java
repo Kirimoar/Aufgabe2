@@ -79,12 +79,26 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
 				
     	        // Respond to clicks on the actions in the CAB
     	    	switch (item.getItemId()) {
-                case R.id.bar_delete:
+                case R.id.bar_read:
                     
-                		// TODO: Löschfunktion aufrufen
+                		// TODO: Irgendwie als gelesen markieren
                 	
                     mode.finish(); // Action picked, so close the CAB
                     return true;
+                    
+                case R.id.bar_unread:
+                    
+            		// TODO: Irgendwie als ungelesen markieren
+            	
+                mode.finish(); // Action picked, so close the CAB
+                return true;
+                
+                case R.id.bar_star:
+                    
+            		// TODO: Irgendwie als starred markieren
+            	
+                mode.finish(); // Action picked, so close the CAB
+                return true;
                 default:
                     return false;
             }
@@ -95,7 +109,7 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
     	    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
     	        // Inflate the menu for the CAB
     	        MenuInflater inflater = mode.getMenuInflater();
-    	        inflater.inflate(R.menu.contextual_myrss, menu);
+    	        inflater.inflate(R.menu.contextual_posts, menu);
     	        return true;
     	    }
 
