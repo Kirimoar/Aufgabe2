@@ -11,9 +11,14 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Messenger;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import at.friki.aufgabe2.R;
 import at.friki.aufgabe2.contentprovider.MyRssContentProvider;
 import at.friki.aufgabe2.database.tableArticles;
@@ -45,9 +50,85 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
 	    int[] to = { android.R.id.text1 };	// Standard Android TextElement
 
 	    getLoaderManager().initLoader(0, null, this);
-	    adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, from, to, 0);	// Anzeigen in Standard Android ListView
+	    adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_multiple_choice, null, from, to, 0);	// Anzeigen in Standard Android ListView
         setListAdapter(adapter);
     }
+	
+	
+	
+	@Override
+	public void onActivityCreated(Bundle savedState) {
+	    super.onActivityCreated(savedState);
+	    
+	   /**************************** Multi-Select und CAB ********************************/
+	    
+	    
+	    final ListView listView = getListView();
+    	listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+    	
+    	listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+
+    	    @Override
+    	    public void onItemCheckedStateChanged(ActionMode mode, int position,
+    	                                          long id, boolean checked) {
+    	        // Here you can do something when items are selected/de-selected,
+    	        // such as update the title in the CAB
+    	    	
+
+    	    }
+
+    	    @Override
+    	    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+				
+    	        // Respond to clicks on the actions in the CAB
+    	    	switch (item.getItemId()) {
+                case R.id.bar_delete:
+                    
+                		// TODO: Löschfunktion aufrufen
+                	
+                    mode.finish(); // Action picked, so close the CAB
+                    return true;
+                default:
+                    return false;
+            }
+
+    	    }
+
+    	    @Override
+    	    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+    	        // Inflate the menu for the CAB
+    	        MenuInflater inflater = mode.getMenuInflater();
+    	        inflater.inflate(R.menu.contextual_myrss, menu);
+    	        return true;
+    	    }
+
+    	    @Override
+    	    public void onDestroyActionMode(ActionMode mode) {
+    	        // Here you can make any necessary updates to the activity when
+    	        // the CAB is removed. By default, selected items are deselected/unchecked.
+    	    }
+
+    	    @Override
+    	    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+    	        // Here you can perform updates to the CAB due to
+    	        // an invalidate() request
+    	        return false;
+    	    }
+    	    
+    	    
+    	});
+	    
+	    
+    	/**************************** Ende Multi-Select und CAB ********************************/
+	
+	} //Ende onActivityCreated
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	@Override
