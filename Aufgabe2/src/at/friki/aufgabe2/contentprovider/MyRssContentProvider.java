@@ -67,10 +67,6 @@ public class MyRssContentProvider extends ContentProvider {
 			case ARTICLES:
 				queryBuilder.setTables(tableArticles.TABLE_NAME);	// Set the table
 				break;
-			case FEED_ID:	// TODO: glaub das brauchen wir nicht
-				/*// Adding the ID to the original query
-				queryBuilder.appendWhere(tableFeeds.COLUMN_ID + "=" + uri.getLastPathSegment());*/
-				break;
 			default:
 				throw new IllegalArgumentException("Unknown URI: " + uri);
 		}
@@ -103,7 +99,7 @@ public class MyRssContentProvider extends ContentProvider {
 	    		throw new IllegalArgumentException("Unknown URI: " + uri);
 	    }
 	    getContext().getContentResolver().notifyChange(uri, null);
-	    db.close();
+	    //db.close();	// Schließen der Datenbank ist laut Dianne Hackborn nicht notwendig
 	    
 	    return Uri.parse(CONTENT_URI_FEEDS + "/" + id);		// TODO: für was? ^^
 	}
@@ -139,7 +135,7 @@ public class MyRssContentProvider extends ContentProvider {
 	    	db.endTransaction();
 	    }
 	    
-	    db.close();
+	    //db.close();	// Schließen der Datenbank ist laut Dianne Hackborn nicht notwendig
 		return numInserted;
 	}
 
@@ -152,24 +148,25 @@ public class MyRssContentProvider extends ContentProvider {
 	    switch (uriType) {
 	    	case FEEDS:
 	    		rowsDeleted = sqlDB.delete(tableFeeds.TABLE_NAME, selection, selectionArgs);
+	    		getContext().getContentResolver().notifyChange(uri, null);
 	    		break;
-	    	case FEED_ID:
+	    	/*case FEED_ID:
 	    		String id = uri.getLastPathSegment();
 	    		if (TextUtils.isEmpty(selection)) {
 	    			rowsDeleted = sqlDB.delete(tableFeeds.TABLE_NAME, tableFeeds.COLUMN_ID + "=" + id, null);
 	    		} else {
 	    			rowsDeleted = sqlDB.delete(tableFeeds.TABLE_NAME, tableFeeds.COLUMN_ID + "=" + id + " and " + selection, selectionArgs);
 	    		}
-	    		break;
+	    		getContext().getContentResolver().notifyChange(uri, null);
+	    		break;*/
 	    	case ARTICLES:
-	    		break;
-	    	case ARTICLE_ID:
+	    		rowsDeleted = sqlDB.delete(tableArticles.TABLE_NAME, selection, selectionArgs);
+	    		// kein notifyChange hier weil sonst das FragmentPostings 2mal aufgerufen werden würde
 	    		break;
 	    	default:
 	    		throw new IllegalArgumentException("Unknown URI: " + uri);
 	    }
 	    
-	    getContext().getContentResolver().notifyChange(uri, null);
 	    return rowsDeleted;
 	}
 	

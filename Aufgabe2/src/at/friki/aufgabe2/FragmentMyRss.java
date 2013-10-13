@@ -3,6 +3,9 @@ package at.friki.aufgabe2;
 /**
  * Created by Chris on 26.09.13.
  */
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.app.ListFragment;
 import android.app.LoaderManager;
@@ -14,6 +17,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,11 +34,12 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 import at.friki.aufgabe2.R;
 import at.friki.aufgabe2.contentprovider.MyRssContentProvider;
+import at.friki.aufgabe2.database.tableArticles;
 import at.friki.aufgabe2.database.tableFeeds;
 
 public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Cursor> {
 
-	private int delItemKey = 0;
+	private List<String> delKeys;
 	private SimpleCursorAdapter adapter;		
 	public static final String BROADCAST_FRAGMENT_MYRSS_CLICK = "BROADCAST_FRAGMENT_MYRSS_CLICK";
 	//protected Object mActionMode;
@@ -45,15 +50,34 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        
+        
+        
         // Nur zu Testzwecken
   		Cursor cursor = getActivity().getContentResolver().query(MyRssContentProvider.CONTENT_URI_ARTICLES, null, null, null, null);
-  		Toast.makeText(getActivity(), Integer.toString(cursor.getCount()), Toast.LENGTH_LONG).show(); 
+  		String tmpToast = "";
+  		
+  		while(cursor.moveToNext()) {
+  			tmpToast += cursor.getString(cursor.getColumnIndexOrThrow(tableArticles.COLUMN_ID));
+  			tmpToast += ": " + cursor.getInt(cursor.getColumnIndexOrThrow(tableArticles.COLUMN_FEEDID));
+  			tmpToast += "; ";
+  		}
+  		
+  		Toast.makeText(getActivity(), tmpToast, Toast.LENGTH_LONG).show(); 
+  		
+  		Cursor cursor2 = getActivity().getContentResolver().query(MyRssContentProvider.CONTENT_URI_ARTICLES, null, null, null, null);
+  		Toast.makeText(getActivity(), Integer.toString(cursor2.getCount()), Toast.LENGTH_LONG).show(); 
         
-        
+  		
+  		
+  		
+  		
         // MyRss-Daten Objekt anlegen
         //String[] elements = MyRssDataStore.getInstance().getMyRssNames(getActivity());	// wird durch contentProvider ersetzt
         //setListAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, elements));
         
+  		delKeys = new ArrayList<String>();
+  		
 		String[] from = { tableFeeds.COLUMN_NAME };
 	    int[] to = { android.R.id.text1 };	// Standard Android TextElement
 
@@ -137,7 +161,16 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
     	        // Here you can do something when items are selected/de-selected,
     	        // such as update the title in the CAB
     	    	
-
+    	    	//String clickedRssFeed = (String) listView.getItemAtPosition(position);
+    	    	
+    	    	if (checked) {
+    	    		if (!delKeys.contains(position))
+    	    			delKeys.add(String.valueOf(position));
+    	    	}
+    	    	else {
+    	    		if (delKeys.contains(position))
+    	    			delKeys.remove(String.valueOf(position));
+    	    	}
     	    }
 
     	    @Override
@@ -148,6 +181,11 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
                 case R.id.bar_delete:
                     
                 		// TODO: Löschfunktion aufrufen
+                	
+                	getActivity().getContentResolver().delete(
+                			MyRssContentProvider.CONTENT_URI_FEEDS, 
+                			tableArticles.COLUMN_ID + " IN (" + new String(new char[delKeys.size()-1]).replace("\0", "?,") + "?)", 
+                			delKeys.toArray(new String[delKeys.size()]));
                 	
                     mode.finish(); // Action picked, so close the CAB
                     return true;
@@ -169,12 +207,14 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
     	    public void onDestroyActionMode(ActionMode mode) {
     	        // Here you can make any necessary updates to the activity when
     	        // the CAB is removed. By default, selected items are deselected/unchecked.
+    	    	delKeys = new ArrayList<String>();
     	    }
 
     	    @Override
     	    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
     	        // Here you can perform updates to the CAB due to
     	        // an invalidate() request
+    	    	delKeys = new ArrayList<String>();
     	        return false;
     	    }
     	    
@@ -214,7 +254,8 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 	
 	} //Ende onActivityCreated
 	
-	 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+	/*
+	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             switch (which){
@@ -229,7 +270,7 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
                 break;
             }
         }
-	};
+	};*/
 	
 	@Override
     public void onResume() {

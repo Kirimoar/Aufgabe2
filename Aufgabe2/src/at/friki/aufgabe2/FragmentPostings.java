@@ -14,14 +14,14 @@ import android.os.Messenger;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 import at.friki.aufgabe2.R;
 import at.friki.aufgabe2.contentprovider.MyRssContentProvider;
 import at.friki.aufgabe2.database.tableArticles;
 import at.friki.aufgabe2.database.tableFeeds;
 
 public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cursor> {
-
-	private RssHandler rssHandler;
+	
 	private SimpleCursorAdapter adapter;	
 	
 	@Override
@@ -29,8 +29,6 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
         super.onCreate(savedInstanceState);
         
         //setListAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, elements));
-        
-        rssHandler = new RssHandler(getActivity(), this);
         
         /*
         Intent intent = new Intent(getActivity(), RssService.class);
@@ -40,19 +38,40 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
         
         getActivity().startService(intent);*/
         
+        int selectedFeedId = getArguments().getInt(getResources().getString(R.string.RssId));
         
-        String[] from = { tableArticles.COLUMN_TITLE };
-	    int[] to = { android.R.id.text1 };	// Standard Android TextElement
-
-	    getLoaderManager().initLoader(0, null, this);
-	    adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null, from, to, 0);	// Anzeigen in Standard Android ListView
-        setListAdapter(adapter);
+        Cursor cursor = getActivity().getContentResolver().query(MyRssContentProvider.CONTENT_URI_ARTICLES, null, tableArticles.COLUMN_FEEDID + "=" + selectedFeedId, null, null);
+		
+		if (cursor != null) {
+			cursor.moveToFirst();
+			
+			String[] from = { tableArticles.COLUMN_TITLE };
+		    int[] to = { android.R.id.text1 };	// Standard Android TextElement
+	
+		    getLoaderManager().initLoader(0, null, this);
+		    adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, cursor, from, to, 0);	// Anzeigen in Standard Android ListView
+	        setListAdapter(adapter);
+			
+			
+			// Nur zu Testzwecken!!
+			String tmpToast = "";
+			cursor.moveToFirst();
+	  		
+	  		while(cursor.moveToNext()) {
+	  			tmpToast += cursor.getString(cursor.getColumnIndexOrThrow(tableArticles.COLUMN_ID));
+	  			tmpToast += ": " + cursor.getInt(cursor.getColumnIndexOrThrow(tableArticles.COLUMN_FEEDID));
+	  			tmpToast += "; ";
+	  		}
+	  		
+	  		Toast.makeText(getActivity(), tmpToast, Toast.LENGTH_LONG).show(); 
+		}
     }
 	
 	
 	@Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
+    public void onListItemClick(ListView l, View v, int position, long id) {	// TODO: bei Click urls auslesen und starten
 		
+		/*
 		ArrayList<String> locUrls = rssHandler.getUrls();
 		
 		if (!locUrls.isEmpty()) {
@@ -62,7 +81,7 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
 			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(locUrls.get(position)));
 			startActivity(browserIntent);
 		}
-		
+		*/
 	}
 
 

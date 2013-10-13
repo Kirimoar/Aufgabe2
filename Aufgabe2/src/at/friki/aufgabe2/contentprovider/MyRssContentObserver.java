@@ -28,20 +28,8 @@ public class MyRssContentObserver extends ContentObserver {
 	}		
 
 	@Override
-	public void onChange(boolean selfChange, Uri uri) {
-		//String[] from = { tableArticles.COLUMN_TITLE };
-	    //int[] to = { android.R.id.text1 };	// Standard Android TextElement
-
-	    //SimpleCursorAdapter adapter = new SimpleCursorAdapter(context, android.R.layout.simple_list_item_1, null, from, to, 0);	// Anzeigen in Standard Android ListView
-	    //((Object) context).setListAdapter(adapter);
-	    
-		
-		
-		
-		// TODO: wird bei jedem Insert aufgerufen... wie können wir das umgehen???
-		
+	public void onChange(boolean selfChange, Uri uri) {		
 	    Intent observerIntent = new Intent(BROADCAST_CONTENT_OBSERVER_CHANGED);
-	    //observerIntent.putExtra(getResources().getString(R.string.RssListPosition), position);
 		LocalBroadcastManager.getInstance(context).sendBroadcast(observerIntent);
 	}
 }
