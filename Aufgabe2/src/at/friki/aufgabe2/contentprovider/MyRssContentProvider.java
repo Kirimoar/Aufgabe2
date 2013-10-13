@@ -4,6 +4,7 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
@@ -106,22 +107,48 @@ public class MyRssContentProvider extends ContentProvider {
 	    
 	    return Uri.parse(CONTENT_URI_FEEDS + "/" + id);		// TODO: für was? ^^
 	}
+	
+	
+	@Override
+	public int bulkInsert(Uri uri, ContentValues[] allValues) {		// Wenn mehrere Zeilen gleichzeitig eingefügt werden sollen
+		SQLiteDatabase db = database.getWritableDatabase();
+	    int uriType = sURIMatcher.match(uri);
+	    int numInserted = 0;
+	    String table;
 
-	
-	
-	
-	
-	
-	
-	
-	
-	// TODO: DELETE und UPDATE noch anpassen
-	
+	    switch (uriType) {
+		    case ARTICLES:
+		        table = tableArticles.TABLE_NAME;
+		        break;
+		    default:
+	    		throw new IllegalArgumentException("Unknown URI: " + uri);
+	    }
+	    
+	    db.beginTransaction();
+	    try {
+	        for (ContentValues cv : allValues) {
+	            long newID = db.insertOrThrow(table, null, cv);
+	            if (newID <= 0) {
+	                throw new SQLException("Failed to insert row into " + uri);
+	            }
+	        }
+	        db.setTransactionSuccessful();
+	        getContext().getContentResolver().notifyChange(uri, null);
+	        numInserted = allValues.length;
+	    } finally {         
+	    	db.endTransaction();
+	    }
+	    
+	    db.close();
+		return numInserted;
+	}
+
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
 	    int uriType = sURIMatcher.match(uri);
 	    SQLiteDatabase sqlDB = database.getWritableDatabase();
 	    int rowsDeleted = 0;
+	    
 	    switch (uriType) {
 	    	case FEEDS:
 	    		rowsDeleted = sqlDB.delete(tableFeeds.TABLE_NAME, selection, selectionArgs);
@@ -134,12 +161,19 @@ public class MyRssContentProvider extends ContentProvider {
 	    			rowsDeleted = sqlDB.delete(tableFeeds.TABLE_NAME, tableFeeds.COLUMN_ID + "=" + id + " and " + selection, selectionArgs);
 	    		}
 	    		break;
+	    	case ARTICLES:
+	    		break;
+	    	case ARTICLE_ID:
+	    		break;
 	    	default:
 	    		throw new IllegalArgumentException("Unknown URI: " + uri);
 	    }
+	    
 	    getContext().getContentResolver().notifyChange(uri, null);
 	    return rowsDeleted;
 	}
+	
+	// TODO: UPDATE noch anpassen
 
 	@Override
 	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
