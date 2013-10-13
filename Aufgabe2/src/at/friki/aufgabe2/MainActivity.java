@@ -16,6 +16,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Messenger;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
@@ -35,11 +36,13 @@ import at.friki.aufgabe2.FragmentSubscribe;
 import at.friki.aufgabe2.R;
 import at.friki.aufgabe2.contentprovider.MyRssContentProvider;
 import at.friki.aufgabe2.contentprovider.MyRssContentObserver;
+import at.friki.aufgabe2.database.tableArticles;
 import at.friki.aufgabe2.database.tableFeeds;
 
 public class MainActivity extends Activity{
 	
 	private String[] leftMenuTitles;
+	private Integer selectedFeedId;
 	private DrawerLayout drawerLayout;
 	private ListView drawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -55,6 +58,7 @@ public class MainActivity extends Activity{
         setContentView(R.layout.activity_main);
         
         title = drawerTitle = getTitle();
+        selectedFeedId = 0;
         
         // Erzeuge Left Slide Menu
         leftMenuTitles = getResources().getStringArray(R.array.left_menu);
@@ -103,6 +107,8 @@ public class MainActivity extends Activity{
         }
         
         observer = new MyRssContentObserver(new Handler(), this);
+        
+        //getContentResolver().delete(MyRssContentProvider.CONTENT_URI_ARTICLES, null, null);	// nur zu Testzwecken ACHTUNG: ALLE ARTICLES WERDEN GELÖSCHT!!!!
     }
 
     @Override
@@ -126,13 +132,17 @@ public class MainActivity extends Activity{
     
     private BroadcastReceiver MyObserverChangedReceiver = new BroadcastReceiver() {
     	@Override
-    	public void onReceive(Context context, Intent intent) { 	// TODO: derzeit noch als Testvariante.... 
+    	public void onReceive(Context context, Intent intent) {
     		Fragment fragment = new FragmentPostings();
+    		
+    		Bundle args = new Bundle();
+	        args.putInt(getResources().getString(R.string.RssId), selectedFeedId);
+	        fragment.setArguments(args);
     		
     		FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction()
 			               .replace(R.id.main_activity_container, fragment)
-			               .addToBackStack(null)
+			               //.addToBackStack(null)
 			               .commit();
     	}
   	};
@@ -153,7 +163,6 @@ public class MainActivity extends Activity{
     		
     		
     		String name = "", url = "";
-    		int id = 0;
     		
     		Cursor cursor = getContentResolver().query(MyRssContentProvider.CONTENT_URI_FEEDS, null, null, null, null);
     		
@@ -162,7 +171,7 @@ public class MainActivity extends Activity{
     			
     				name = cursor.getString(cursor.getColumnIndexOrThrow(tableFeeds.COLUMN_NAME));	// Spalte Name bei aktueller Cursor Position auslesen
     				url = cursor.getString(cursor.getColumnIndexOrThrow(tableFeeds.COLUMN_URL));	// Spalte Url bei aktueller Cursor Position auslesen
-    				id = cursor.getInt(cursor.getColumnIndexOrThrow(tableFeeds.COLUMN_ID));
+    				selectedFeedId = cursor.getInt(cursor.getColumnIndexOrThrow(tableFeeds.COLUMN_ID));
     			}
     			
     			cursor.close();
@@ -184,9 +193,14 @@ public class MainActivity extends Activity{
 			               .commit();
 			               */
     		
+    		getContentResolver().delete(MyRssContentProvider.CONTENT_URI_ARTICLES, tableArticles.COLUMN_FEEDID + "=" + selectedFeedId, null);
+    		
+    		RssHandler rssHandler = new RssHandler(context);
     		Intent startIntent = new Intent(context, RssService.class);
     		startIntent.putExtra(getResources().getString(R.string.RssName), name);
     		startIntent.putExtra(getResources().getString(R.string.RssAdress), url);
+    		startIntent.putExtra(getResources().getString(R.string.RssId), selectedFeedId);		// Ausgewählte Id des Feeds übergeben damit dieser danach selected werden kann
+    		startIntent.putExtra(getResources().getString(R.string.RssHandler), new Messenger(rssHandler));
     		context.startService(startIntent);
     	}
   	};
