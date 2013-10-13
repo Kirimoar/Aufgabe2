@@ -152,19 +152,18 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
 	
 	
 	@Override
-    public void onListItemClick(ListView l, View v, int position, long id) {	// TODO: bei Click urls auslesen und starten
+    public void onListItemClick(ListView l, View v, int position, long id) {
 		
-		/*
-		ArrayList<String> locUrls = rssHandler.getUrls();
-		
-		if (!locUrls.isEmpty()) {
-			if (!locUrls.get(position).startsWith("http://") && !locUrls.get(position).startsWith("https://"))
-				locUrls.set(position, "http://" + locUrls.get(position));
+		Cursor cursor = (Cursor) l.getItemAtPosition(position);
+		String clickedUri = cursor.getString(cursor.getColumnIndex(tableArticles.COLUMN_LINK));	// URI auslesen
+
+		if (!clickedUri.isEmpty()) {
+			if (!clickedUri.startsWith("http://") && !clickedUri.startsWith("https://"))
+				clickedUri = "http://" + clickedUri;
 			
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(locUrls.get(position)));
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(clickedUri));
 			startActivity(browserIntent);
 		}
-		*/
 	}
 
 

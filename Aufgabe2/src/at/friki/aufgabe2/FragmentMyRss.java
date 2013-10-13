@@ -164,7 +164,7 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
     	    	//String clickedRssFeed = (String) listView.getItemAtPosition(position);
     	    	
     	    	Cursor cursor = (Cursor) listView.getItemAtPosition(position);
-    	    	int clickedId = cursor.getInt(0);	// _id auslesen
+    	    	int clickedId = cursor.getInt(cursor.getColumnIndex(tableFeeds.COLUMN_ID));	// _id auslesen
     	    	
     	    	if (checked) {
     	    		if (!delKeys.contains(clickedId))
