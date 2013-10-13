@@ -43,7 +43,7 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
         
         getActivity().startService(intent);*/
         
-        int selectedFeedId = getArguments().getInt(getResources().getString(R.string.RssId));	//sf
+        int selectedFeedId = getArguments().getInt(getResources().getString(R.string.RssId));
         
 
         Cursor cursor = getActivity().getContentResolver().query(MyRssContentProvider.CONTENT_URI_ARTICLES, null, tableArticles.COLUMN_FEEDID + "=" + selectedFeedId, null, null);

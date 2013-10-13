@@ -164,16 +164,15 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
     	    	//String clickedRssFeed = (String) listView.getItemAtPosition(position);
     	    	
     	    	Cursor cursor = (Cursor) listView.getItemAtPosition(position);
-    	    	
-    	    	
+    	    	int clickedId = cursor.getInt(0);	// _id auslesen
     	    	
     	    	if (checked) {
-    	    		if (!delKeys.contains(position))
-    	    			delKeys.add(String.valueOf(position));
+    	    		if (!delKeys.contains(clickedId))
+    	    			delKeys.add(String.valueOf(clickedId));
     	    	}
     	    	else {
-    	    		if (delKeys.contains(position))
-    	    			delKeys.remove(String.valueOf(position));
+    	    		if (delKeys.contains(clickedId))
+    	    			delKeys.remove(String.valueOf(clickedId));
     	    	}
     	    }
 
@@ -183,12 +182,9 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
     	        // Respond to clicks on the actions in the CAB
     	    	switch (item.getItemId()) {
                 case R.id.bar_delete:
-                    
-                		// TODO: Löschfunktion aufrufen
-                	
                 	getActivity().getContentResolver().delete(
                 			MyRssContentProvider.CONTENT_URI_FEEDS, 
-                			tableArticles.COLUMN_ID + " IN (" + new String(new char[delKeys.size()-1]).replace("\0", "?,") + "?)", 
+                			tableArticles.COLUMN_ID + " IN (" + new String(new char[delKeys.size()-1]).replace("\0", "?,") + "?)", 		// z.B.: WHERE _id IN (?, ?) =
                 			delKeys.toArray(new String[delKeys.size()]));
                 	
                     mode.finish(); // Action picked, so close the CAB

@@ -24,8 +24,8 @@ public class MyRssContentProvider extends ContentProvider {
 	private static final int ARTICLES = 20;
 	private static final int ARTICLE_ID = 21;
 	
-	private static final String BASE_PATH_FEEDS = "tableFeeds";
-	private static final String BASE_PATH_ARTICLES = "tableArticles";
+	public static final String BASE_PATH_FEEDS = "tableFeeds";
+	public static final String BASE_PATH_ARTICLES = "tableArticles";
 	
 	private static final String AUTHORITY = "at.friki.aufgabe2.contentprovider.myrsscontentprovider";
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);

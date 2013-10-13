@@ -122,18 +122,39 @@ public class MainActivity extends Activity{
         LocalBroadcastManager.getInstance(this).registerReceiver(MyRssReceiver,
         	      new IntentFilter(FragmentMyRss.BROADCAST_FRAGMENT_MYRSS_CLICK));
         
-        LocalBroadcastManager.getInstance(this).registerReceiver(MyObserverChangedReceiver,
-      	      new IntentFilter(MyRssContentObserver.BROADCAST_CONTENT_OBSERVER_CHANGED));
+        LocalBroadcastManager.getInstance(this).registerReceiver(MyObserverArticlesChangedReceiver,
+      	      new IntentFilter(MyRssContentObserver.BROADCAST_CONTENT_OBSERVER_ARTICLES_CHANGED));
+        
+        LocalBroadcastManager.getInstance(this).registerReceiver(MyObserverFeedsChangedReceiver,
+        	      new IntentFilter(MyRssContentObserver.BROADCAST_CONTENT_OBSERVER_FEEDS_CHANGED));
         
         /** ContentObserver - wird bei Änderung einer URI gedriggert*/
         getContentResolver().registerContentObserver(MyRssContentProvider.CONTENT_URI_ARTICLES, true, observer);
+        getContentResolver().registerContentObserver(MyRssContentProvider.CONTENT_URI_FEEDS, true, observer);
     }
     
     
-    private BroadcastReceiver MyObserverChangedReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver MyObserverArticlesChangedReceiver = new BroadcastReceiver() {
     	@Override
     	public void onReceive(Context context, Intent intent) {
     		Fragment fragment = new FragmentPostings();
+    		
+    		Bundle args = new Bundle();
+	        args.putInt(getResources().getString(R.string.RssId), selectedFeedId);
+	        fragment.setArguments(args);
+    		
+    		FragmentManager fragmentManager = getFragmentManager();
+			fragmentManager.beginTransaction()
+			               .replace(R.id.main_activity_container, fragment)
+			               //.addToBackStack(null)
+			               .commit();
+    	}
+  	};
+  	
+  	private BroadcastReceiver MyObserverFeedsChangedReceiver = new BroadcastReceiver() {
+    	@Override
+    	public void onReceive(Context context, Intent intent) {
+    		Fragment fragment = new FragmentMyRss();
     		
     		Bundle args = new Bundle();
 	        args.putInt(getResources().getString(R.string.RssId), selectedFeedId);

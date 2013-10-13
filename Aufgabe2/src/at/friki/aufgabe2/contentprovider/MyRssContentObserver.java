@@ -11,11 +11,13 @@ import android.widget.SimpleCursorAdapter;
 import at.friki.aufgabe2.R;
 import at.friki.aufgabe2.database.tableArticles;
 import at.friki.aufgabe2.database.tableFeeds;
+import at.friki.aufgabe2.contentprovider.MyRssContentProvider;
 
 public class MyRssContentObserver extends ContentObserver {
 
 	private Context context;
-	public static final String BROADCAST_CONTENT_OBSERVER_CHANGED = "BROADCAST_CONTENT_OBSERVER_CHANGED";
+	public static final String BROADCAST_CONTENT_OBSERVER_ARTICLES_CHANGED = "BROADCAST_CONTENT_OBSERVER_ARTICLES_CHANGED";
+	public static final String BROADCAST_CONTENT_OBSERVER_FEEDS_CHANGED = "BROADCAST_CONTENT_OBSERVER_FEEDS_CHANGED";
 	
 	public MyRssContentObserver(Handler handler, Context context) {
         super(handler);
@@ -24,12 +26,19 @@ public class MyRssContentObserver extends ContentObserver {
 
 	@Override
 	public void onChange(boolean selfChange) {
-      this.onChange(selfChange, null);
+		this.onChange(selfChange, null);
 	}		
 
 	@Override
-	public void onChange(boolean selfChange, Uri uri) {		
-	    Intent observerIntent = new Intent(BROADCAST_CONTENT_OBSERVER_CHANGED);
-		LocalBroadcastManager.getInstance(context).sendBroadcast(observerIntent);
+	public void onChange(boolean selfChange, Uri uri) {	
+		
+		if (uri.getLastPathSegment().equals(MyRssContentProvider.BASE_PATH_FEEDS)) {
+			Intent observerIntent = new Intent(BROADCAST_CONTENT_OBSERVER_FEEDS_CHANGED);
+			LocalBroadcastManager.getInstance(context).sendBroadcast(observerIntent);
+		}
+		else {
+			Intent observerIntent = new Intent(BROADCAST_CONTENT_OBSERVER_ARTICLES_CHANGED);
+			LocalBroadcastManager.getInstance(context).sendBroadcast(observerIntent);
+		}
 	}
 }
