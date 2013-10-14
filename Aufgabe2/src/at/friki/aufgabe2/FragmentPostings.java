@@ -158,6 +158,11 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
 	}
 
 
+	
+	public void RefreshCursorLoader() {
+		getLoaderManager().restartLoader(0, null, this);
+	}
+	
 	/**
      * This creates and return a new Loader (CursorLoader or custom Loader) for the given ID. This method returns the Loader that is created, 
      * but you don't need to capture a reference to it. 

@@ -281,6 +281,10 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
     }
 
 	
+	public void RefreshCursorLoader() {
+		getLoaderManager().restartLoader(0, null, this);
+	}
+	
 
 	/**
      * This creates and return a new Loader (CursorLoader or custom Loader) for the given ID. This method returns the Loader that is created, 

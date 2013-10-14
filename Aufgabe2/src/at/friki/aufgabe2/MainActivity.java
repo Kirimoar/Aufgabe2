@@ -137,7 +137,9 @@ public class MainActivity extends Activity{
     private BroadcastReceiver MyObserverArticlesChangedReceiver = new BroadcastReceiver() {
     	@Override
     	public void onReceive(Context context, Intent intent) {
-    		Fragment fragment = new FragmentPostings();
+    		FragmentPostings fragment = new FragmentPostings();
+    		
+    		//fragment.RefreshCursorLoader();
     		
     		Bundle args = new Bundle();
 	        args.putInt(getResources().getString(R.string.RssId), selectedFeedId);
@@ -154,7 +156,7 @@ public class MainActivity extends Activity{
   	private BroadcastReceiver MyObserverFeedsChangedReceiver = new BroadcastReceiver() {
     	@Override
     	public void onReceive(Context context, Intent intent) {
-    		Fragment fragment = new FragmentMyRss();
+    		FragmentMyRss fragment = new FragmentMyRss();
     		
     		Bundle args = new Bundle();
 	        args.putInt(getResources().getString(R.string.RssId), selectedFeedId);
