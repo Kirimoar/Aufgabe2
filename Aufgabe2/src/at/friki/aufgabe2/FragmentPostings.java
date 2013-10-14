@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.ListFragment;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -12,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Messenger;
 import android.view.ActionMode;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -81,21 +83,42 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
     	    	switch (item.getItemId()) {
                 case R.id.bar_read:
                     
-                		// TODO: Irgendwie als gelesen markieren
+                	Context context = getActivity().getApplicationContext();
+                	CharSequence text = "Marked Posts as READ";
+                	int duration = Toast.LENGTH_SHORT;
+
+                	Toast toast = Toast.makeText(context, text, duration);
+                	toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+    
+                	toast.show();
                 	
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                     
                 case R.id.bar_unread:
                     
-            		// TODO: Irgendwie als ungelesen markieren
+                	context = getActivity().getApplicationContext();
+                	text = "Marked Posts as UNREAD";
+                	duration = Toast.LENGTH_SHORT;
+
+                	toast = Toast.makeText(context, text, duration);
+                	toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+                	
+                	toast.show();
             	
                 mode.finish(); // Action picked, so close the CAB
                 return true;
                 
                 case R.id.bar_star:
                     
-            		// TODO: Irgendwie als starred markieren
+                	context = getActivity().getApplicationContext();
+                	text = "Marked Posts as STARRED";
+                	duration = Toast.LENGTH_SHORT;
+
+                	toast = Toast.makeText(context, text, duration);
+                	toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+                	
+                	toast.show();
             	
                 mode.finish(); // Action picked, so close the CAB
                 return true;
