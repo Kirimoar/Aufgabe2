@@ -55,9 +55,6 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 	    getLoaderManager().initLoader(0, null, this);
 	    adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_multiple_choice, null, from, to, 0);	// Anzeigen in Standard Android ListView
         setListAdapter(adapter);
-        
-        
-   
     }
 
 	@Override

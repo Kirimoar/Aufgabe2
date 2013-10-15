@@ -145,11 +145,13 @@ public class MainActivity extends Activity{
 	        args.putInt(getResources().getString(R.string.RssId), selectedFeedId);
 	        fragment.setArguments(args);
     		
-    		FragmentManager fragmentManager = getFragmentManager();
-			fragmentManager.beginTransaction()
-			               .replace(R.id.main_activity_container, fragment)
-			               //.addToBackStack(null)
-			               .commit();
+	        if (!isFinishing()) {
+	    		FragmentManager fragmentManager = getFragmentManager();
+				fragmentManager.beginTransaction()
+				               .replace(R.id.main_activity_container, fragment)
+				               //.addToBackStack(null)
+				               .commit();
+	        }
     	}
   	};
   	
@@ -162,11 +164,13 @@ public class MainActivity extends Activity{
 	        args.putInt(getResources().getString(R.string.RssId), selectedFeedId);
 	        fragment.setArguments(args);
     		
-    		FragmentManager fragmentManager = getFragmentManager();
-			fragmentManager.beginTransaction()
-			               .replace(R.id.main_activity_container, fragment)
-			               //.addToBackStack(null)
-			               .commit();
+	        if (!isFinishing()) {
+	    		FragmentManager fragmentManager = getFragmentManager();
+				fragmentManager.beginTransaction()
+				               .replace(R.id.main_activity_container, fragment)
+				               //.addToBackStack(null)
+				               .commit();
+	        }
     	}
   	};
   	
