@@ -42,41 +42,11 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
 	private List<String> delKeys;
 	private SimpleCursorAdapter adapter;		
 	public static final String BROADCAST_FRAGMENT_MYRSS_CLICK = "BROADCAST_FRAGMENT_MYRSS_CLICK";
-	//protected Object mActionMode;
-	
-	
-	
+
 	@Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        
-        
-
-        
-        // Nur zu Testzwecken
-        /*
-  		Cursor cursor = getActivity().getContentResolver().query(MyRssContentProvider.CONTENT_URI_ARTICLES, null, null, null, null);
-  		String tmpToast = "";
+        super.onCreate(savedInstanceState); 		
   		
-  		while(cursor.moveToNext()) {
-  			tmpToast += cursor.getString(cursor.getColumnIndexOrThrow(tableArticles.COLUMN_ID));
-  			tmpToast += ": " + cursor.getInt(cursor.getColumnIndexOrThrow(tableArticles.COLUMN_FEEDID));
-  			tmpToast += "; ";
-  		}
-  		
-  		Toast.makeText(getActivity(), tmpToast, Toast.LENGTH_LONG).show(); 
-  		
-  		Cursor cursor2 = getActivity().getContentResolver().query(MyRssContentProvider.CONTENT_URI_ARTICLES, null, null, null, null);
-  		Toast.makeText(getActivity(), Integer.toString(cursor2.getCount()), Toast.LENGTH_LONG).show(); 
-        */
-  		
-  		
-  		
-  		
-        // MyRss-Daten Objekt anlegen
-        //String[] elements = MyRssDataStore.getInstance().getMyRssNames(getActivity());	// wird durch contentProvider ersetzt
-        //setListAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, elements));
-        
   		delKeys = new ArrayList<String>();
   		
 		String[] from = { tableFeeds.COLUMN_NAME };
@@ -89,53 +59,6 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
         
    
     }
-	
-	
-	/************** ALTER PART CAB CALLBACK **************
-	
-	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-
-	    // Called when the action mode is created; startActionMode() was called
-	    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-	      // inflate a menu resource providing context menu items
-	      MenuInflater inflater = mode.getMenuInflater();
-	      // assumes that you have "contexual.xml" menu resources
-	      inflater.inflate(R.menu.contextual, menu);
-	      return true;
-	    }
-
-	    // called each time the action mode is shown. Always called after
-	    // onCreateActionMode, but
-	    // may be called multiple times if the mode is invalidated.
-	    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-	      return false; // Return false if nothing is done
-	    }
-
-	    // called when the user selects a contextual menu item
-	    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-	      switch (item.getItemId()) {
-	      case R.id.menu_item1:
-	      
-	    	   mode.finish(); 	//Wenn Klick auf Item1, dann beende ActionMode
-	        
-	    	 return true;
-	      default:
-	        return false;
-	      }
-	    }
-
-	    // called when the user exits the action mode
-	    public void onDestroyActionMode(ActionMode mode) {
-	      mActionMode = null;
-	    }
-	  };
-	
-	
-	  *****************************************************************/
-	  
-	  
-	
-	
 
 	@Override
     public void onListItemClick(ListView l, View v, int position, long id) {
@@ -221,57 +144,7 @@ public class FragmentMyRss extends ListFragment implements LoaderCallbacks<Curso
     	    
     	    
     	});
-	    
-	    
-    	/**************************** Ende Multi-Select und CAB ********************************/
-	    
-   
-	  //  getListView().setOnItemLongClickListener(new OnItemLongClickListener() {	// Langes drücken auf Item
-	  //      @Override
-	  //      public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-	        	//delItemKey = arg2;
-	        	//AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	        	//builder.setMessage("RSS Feed löschen?").setPositiveButton("Ja", dialogClickListener).setNegativeButton("Nein", dialogClickListener).show();		//Dialog zeigen
-	            //return true;
-	
-	        	
-	        	/************** ALTER PART CAB LONGCLICK **************
-	        	
-	        	if (mActionMode != null) {
-	                return false;
-	              }
-
-	              // start the CAB using the ActionMode.Callback defined above
-	              mActionMode = getActivity()
-	                  .startActionMode(mActionModeCallback);
-	              arg1.setSelected(true);
-	              return true;
-
-	        	*********************************************/
-
-	   //   }
-	   // });
-	
-	
-	} //Ende onActivityCreated
-	
-	/*
-	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            switch (which){
-            case DialogInterface.BUTTON_POSITIVE:													//wenn Dialogantwort JA
-            	MyRssDataStore.getInstance().removeRssFeed(getActivity(), delItemKey);		// delItemKey ItemPosition auf die geklickt wurde
-	            String[] elements = MyRssDataStore.getInstance().getMyRssNames(getActivity());
-	     
-	            setListAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, elements));
-                break;
-
-            case DialogInterface.BUTTON_NEGATIVE:													//wenn Dialogantwort NEIN
-                break;
-            }
-        }
-	};*/
+	}
 	
 	@Override
     public void onResume() {
