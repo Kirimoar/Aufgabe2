@@ -180,25 +180,14 @@ public class MyRssContentProvider extends ContentProvider {
 	    int rowsUpdated = 0;
 	    switch (uriType) {
 	    	case FEEDS:
-	    		rowsUpdated = sqlDB.update(tableFeeds.TABLE_NAME, 
-			          values, 
-			          selection,
-			          selectionArgs);
+	    		rowsUpdated = sqlDB.update(tableFeeds.TABLE_NAME, values, selection, selectionArgs);
 	    		break;
 	    	case FEED_ID:
 	    		String id = uri.getLastPathSegment();
 	    		if (TextUtils.isEmpty(selection)) {
-	    			rowsUpdated = sqlDB.update(tableFeeds.TABLE_NAME, 
-			            values,
-			            tableFeeds.COLUMN_ID + "=" + id, 
-			            null);
+	    			rowsUpdated = sqlDB.update(tableFeeds.TABLE_NAME, values, tableFeeds.COLUMN_ID + "=" + id, null);
 	    		} else {
-	    			rowsUpdated = sqlDB.update(tableFeeds.TABLE_NAME, 
-			            values,
-			            tableFeeds.COLUMN_ID + "=" + id 
-			            + " and " 
-			            + selection,
-			            selectionArgs);
+	    			rowsUpdated = sqlDB.update(tableFeeds.TABLE_NAME, values, tableFeeds.COLUMN_ID + "=" + id + " and " + selection, selectionArgs);
 	    		}
 	    		break;
 	    	default:

@@ -261,7 +261,7 @@ public class MainActivity extends Activity{
             FragmentTransaction trans = man.beginTransaction();
             
             trans.replace(R.id.main_activity_container, new FragmentMyRss());					// Eigene Feeds anzeigen
-            trans.addToBackStack(null);
+            //trans.addToBackStack(null);
             trans.commit();
             
             changeHighlight();
