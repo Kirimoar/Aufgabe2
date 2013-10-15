@@ -184,11 +184,6 @@ public class MainActivity extends Activity{
     		setTitle(getResources().getStringArray(R.array.left_menu)[1]);
   
     		int position = intent.getIntExtra(getString(R.string.RssListPosition), 0);
-    		
-			//String[] elements = MyRssDataStore.getInstance().getMyRssNames(context);
-			//String[] urls = MyRssDataStore.getInstance().getMyRssUrls(context);			// ersetzen durch contentProvider
-    		
-    		
     		String name = "", url = "";
     		
     		Cursor cursor = getContentResolver().query(MyRssContentProvider.CONTENT_URI_FEEDS, null, null, null, null);
@@ -203,22 +198,6 @@ public class MainActivity extends Activity{
     			
     			cursor.close();
     		}
-    		
-    		/*
-    		Fragment fragment = new FragmentPostings();
-    	        
-	        Bundle args = new Bundle();
-	        args.putInt(getResources().getString(R.string.RssId), id);
-	        args.putString(getResources().getString(R.string.RssName), name);
-			args.putString(getResources().getString(R.string.RssAdress), url);	//http://derStandard.at/?page=rss&ressort=Webstandard
-			fragment.setArguments(args);
-			
-			FragmentManager fragmentManager = getFragmentManager();
-			fragmentManager.beginTransaction()
-			               .replace(R.id.main_activity_container, fragment)
-			               .addToBackStack(null)
-			               .commit();
-			               */
     		
     		getContentResolver().delete(MyRssContentProvider.CONTENT_URI_ARTICLES, tableArticles.COLUMN_FEEDID + "=" + selectedFeedId, null);
     		
@@ -243,22 +222,13 @@ public class MainActivity extends Activity{
     		String txtSubscribeName = intent.getStringExtra(getString(R.string.txtSubscribeName));
       		String txtSubscribeUrl = intent.getStringExtra(getString(R.string.txtSubscribeUrl));
       		
-      		//MyRssDataStore.getInstance().saveNewRssFeed(context, txtSubscribeName, txtSubscribeUrl, true);	// soll ersetzt werden durch contentProvider
-      		
       		ContentValues values = new ContentValues();
       	    values.put(tableFeeds.COLUMN_NAME, txtSubscribeName);
       	    values.put(tableFeeds.COLUMN_URL, txtSubscribeUrl);
       		
       		Uri uri = getContentResolver().insert(MyRssContentProvider.CONTENT_URI_FEEDS, values);
       		
-      		
-      		// Nur zu Testzwecken
-      		//Cursor cursor = getContentResolver().query(MyRssContentProvider.CONTENT_URI_FEEDS, null, null, null, null);
-      		//Toast.makeText(context, Integer.toString(cursor.getCount()), Toast.LENGTH_LONG).show(); 
-      		
-      		
-      		
-      		
+
       		setTitle(getResources().getStringArray(R.array.left_menu)[1]);
         	
         	FragmentManager man = getFragmentManager();
@@ -295,10 +265,6 @@ public class MainActivity extends Activity{
 	        default:
 	        	fragment = new FragmentSubscribe();
 	    }
-    	
-        //Bundle args = new Bundle();
-        //args.putInt(MyListFragment1.ARG_PLANET_NUMBER, position);
-        //fragment.setArguments(args);
 
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getFragmentManager();
@@ -358,8 +324,6 @@ public class MainActivity extends Activity{
         
         drawerList.setItemChecked(0, true);
         setTitle(leftMenuTitles[0]);
-
- 	
     }
     
     public void ActionMyFeeds(MenuItem item){
@@ -375,8 +339,7 @@ public class MainActivity extends Activity{
  	
     }
     
-    
-    
+ 
   
     /**
      * When using the ActionBarDrawerToggle, you must call it during
@@ -405,12 +368,4 @@ public class MainActivity extends Activity{
     	LocalBroadcastManager.getInstance(this).unregisterReceiver(MyRssReceiver);
     	getContentResolver().unregisterContentObserver(observer);
     }
-
-
 }
-
-
-
-
-
-

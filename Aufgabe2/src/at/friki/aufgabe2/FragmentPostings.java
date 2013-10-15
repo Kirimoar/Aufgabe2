@@ -34,16 +34,6 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        //setListAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, elements));
-        
-        /*
-        Intent intent = new Intent(getActivity(), RssService.class);
-        intent.putExtra(getResources().getString(R.string.RssName), getArguments().getString(getResources().getString(R.string.RssName)));
-        intent.putExtra(getResources().getString(R.string.RssAdress), getArguments().getString(getResources().getString(R.string.RssAdress)));
-        //intent.putExtra(getResources().getString(R.string.RssHandler), new Messenger(this.rssHandler));
-        
-        getActivity().startService(intent);*/
 
 		String[] from = { tableArticles.COLUMN_TITLE };
 	    int[] to = { android.R.id.text1 };	// Standard Android TextElement
@@ -52,8 +42,6 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
 	    adapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_multiple_choice, null, from, to, 0);	// Anzeigen in Standard Android ListView
 	    setListAdapter(adapter);
     }
-	
-	
 	
 	@Override
 	public void onActivityCreated(Bundle savedState) {
@@ -73,7 +61,6 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
     	        // Here you can do something when items are selected/de-selected,
     	        // such as update the title in the CAB
     	    	mode.setTitle("Mark as:");
-
     	    }
 
     	    @Override
@@ -81,51 +68,50 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
 				
     	        // Respond to clicks on the actions in the CAB
     	    	switch (item.getItemId()) {
-                case R.id.bar_read:
-                    
-                	Context context = getActivity().getApplicationContext();
-                	CharSequence text = "Marked Posts as READ";
-                	int duration = Toast.LENGTH_SHORT;
-
-                	Toast toast = Toast.makeText(context, text, duration);
-                	toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
-    
-                	toast.show();
-                	
-                    mode.finish(); // Action picked, so close the CAB
-                    return true;
-                    
-                case R.id.bar_unread:
-                    
-                	context = getActivity().getApplicationContext();
-                	text = "Marked Posts as UNREAD";
-                	duration = Toast.LENGTH_SHORT;
-
-                	toast = Toast.makeText(context, text, duration);
-                	toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
-                	
-                	toast.show();
-            	
-                mode.finish(); // Action picked, so close the CAB
-                return true;
-                
-                case R.id.bar_star:
-                    
-                	context = getActivity().getApplicationContext();
-                	text = "Marked Posts as STARRED";
-                	duration = Toast.LENGTH_SHORT;
-
-                	toast = Toast.makeText(context, text, duration);
-                	toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
-                	
-                	toast.show();
-            	
-                mode.finish(); // Action picked, so close the CAB
-                return true;
-                default:
-                    return false;
-            }
-
+	                case R.id.bar_read:
+	                    
+	                	Context context = getActivity().getApplicationContext();
+	                	CharSequence text = "Marked Posts as READ";
+	                	int duration = Toast.LENGTH_SHORT;
+	
+	                	Toast toast = Toast.makeText(context, text, duration);
+	                	toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+	    
+	                	toast.show();
+	                	
+	                    mode.finish(); // Action picked, so close the CAB
+	                    return true;
+	                    
+	                case R.id.bar_unread:
+	                    
+	                	context = getActivity().getApplicationContext();
+	                	text = "Marked Posts as UNREAD";
+	                	duration = Toast.LENGTH_SHORT;
+	
+	                	toast = Toast.makeText(context, text, duration);
+	                	toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+	                	
+	                	toast.show();
+	            	
+	                mode.finish(); // Action picked, so close the CAB
+	                return true;
+	                
+	                case R.id.bar_star:
+	                    
+	                	context = getActivity().getApplicationContext();
+	                	text = "Marked Posts as STARRED";
+	                	duration = Toast.LENGTH_SHORT;
+	
+	                	toast = Toast.makeText(context, text, duration);
+	                	toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+	                	
+	                	toast.show();
+	            	
+	                mode.finish(); // Action picked, so close the CAB
+	                return true;
+	                default:
+	                    return false;
+	            }
     	    }
 
     	    @Override
@@ -148,8 +134,6 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
     	        // an invalidate() request
     	        return false;
     	    }
-    	    
-    	    
     	});
 	    
 	    
@@ -157,14 +141,7 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
 	
 	} //Ende onActivityCreated
 	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	@Override
     public void onListItemClick(ListView l, View v, int position, long id) {
 		
@@ -179,7 +156,6 @@ public class FragmentPostings extends ListFragment implements LoaderCallbacks<Cu
 			startActivity(browserIntent);
 		}
 	}
-
 
 	
 	public void RefreshCursorLoader() {

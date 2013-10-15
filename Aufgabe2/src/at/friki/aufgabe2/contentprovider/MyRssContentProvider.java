@@ -32,13 +32,6 @@ public class MyRssContentProvider extends ContentProvider {
 	public static final Uri CONTENT_URI_FEEDS = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_FEEDS);
 	public static final Uri CONTENT_URI_ARTICLES = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH_ARTICLES);
 	
-	/*
-	private static final String BASE_PATH = "feeds";
-	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
-	
-	public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/feeds";
-	public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/feed";*/
-	
 	private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
   
 	static {
@@ -150,15 +143,6 @@ public class MyRssContentProvider extends ContentProvider {
 	    		rowsDeleted = sqlDB.delete(tableFeeds.TABLE_NAME, selection, selectionArgs);
 	    		getContext().getContentResolver().notifyChange(uri, null);
 	    		break;
-	    	/*case FEED_ID:
-	    		String id = uri.getLastPathSegment();
-	    		if (TextUtils.isEmpty(selection)) {
-	    			rowsDeleted = sqlDB.delete(tableFeeds.TABLE_NAME, tableFeeds.COLUMN_ID + "=" + id, null);
-	    		} else {
-	    			rowsDeleted = sqlDB.delete(tableFeeds.TABLE_NAME, tableFeeds.COLUMN_ID + "=" + id + " and " + selection, selectionArgs);
-	    		}
-	    		getContext().getContentResolver().notifyChange(uri, null);
-	    		break;*/
 	    	case ARTICLES:
 	    		rowsDeleted = sqlDB.delete(tableArticles.TABLE_NAME, selection, selectionArgs);
 	    		// kein notifyChange hier weil sonst das FragmentPostings 2mal aufgerufen werden würde
@@ -170,8 +154,6 @@ public class MyRssContentProvider extends ContentProvider {
 	    return rowsDeleted;
 	}
 	
-	// TODO: UPDATE noch anpassen
-
 	@Override
 	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
@@ -179,15 +161,15 @@ public class MyRssContentProvider extends ContentProvider {
 	    SQLiteDatabase sqlDB = database.getWritableDatabase();
 	    int rowsUpdated = 0;
 	    switch (uriType) {
-	    	case FEEDS:
-	    		rowsUpdated = sqlDB.update(tableFeeds.TABLE_NAME, values, selection, selectionArgs);
+	    	case ARTICLES:
+	    		rowsUpdated = sqlDB.update(tableArticles.TABLE_NAME, values, selection, selectionArgs);
 	    		break;
-	    	case FEED_ID:
+	    	case ARTICLE_ID:
 	    		String id = uri.getLastPathSegment();
 	    		if (TextUtils.isEmpty(selection)) {
-	    			rowsUpdated = sqlDB.update(tableFeeds.TABLE_NAME, values, tableFeeds.COLUMN_ID + "=" + id, null);
+	    			rowsUpdated = sqlDB.update(tableArticles.TABLE_NAME, values, tableArticles.COLUMN_ID + "=" + id, null);
 	    		} else {
-	    			rowsUpdated = sqlDB.update(tableFeeds.TABLE_NAME, values, tableFeeds.COLUMN_ID + "=" + id + " and " + selection, selectionArgs);
+	    			rowsUpdated = sqlDB.update(tableArticles.TABLE_NAME, values, tableArticles.COLUMN_ID + "=" + id + " and " + selection, selectionArgs);
 	    		}
 	    		break;
 	    	default:

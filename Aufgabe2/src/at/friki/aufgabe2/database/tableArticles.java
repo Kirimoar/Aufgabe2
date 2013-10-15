@@ -11,6 +11,8 @@ public class tableArticles {
 	public static final String COLUMN_DESCRIPTION = "description";
 	public static final String COLUMN_TITLE = "title";
 	public static final String COLUMN_LINK = "link";
+	public static final String COLUMN_READ = "read";
+	public static final String COLUMN_STARRED = "starred";
 	
 	// Database creation SQL statement
 	private static final String DATABASE_CREATE = "create table " 
@@ -21,6 +23,8 @@ public class tableArticles {
       + COLUMN_DESCRIPTION + " TEXT, " 
       + COLUMN_TITLE + " TEXT, "
       + COLUMN_LINK + " TEXT, "
+      + COLUMN_READ + " INTEGER, "
+      + COLUMN_STARRED + " INTEGER, "
       + "FOREIGN KEY(" + COLUMN_FEEDID + ") REFERENCES feeds(" + COLUMN_ID + ")"
       + ");";
 
